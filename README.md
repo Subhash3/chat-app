@@ -16,7 +16,7 @@
     - [x] List of users(Conversations.)
     - [x] Set active conversation.
     - [x] Render particular user's chats.
-    - [] Create new message form.
+    - [x] Create new message form.
     - [] Connect backend.
     - [] Setup socket IO Client
     - [] Differentiate sent, pending and unset message.
