@@ -1,0 +1,41 @@
+.new-msg-form{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #fafafa;
+    height: 60px;
+    align-items: center;
+    padding: 10px;
+
+    input{
+        width: 70%;
+        padding: 10px;
+        outline: none;
+
+        &:focus{
+            outline: none;
+        }
+        &:active{
+            outline: none;
+        }
+    }
+    button{
+        border: none;
+        width: 100px;
+        padding: 10px;
+        background-color: rgb(6, 180, 99);
+        color: white;
+        border-radius: 3px;
+        cursor: pointer;
+        // border: 1px solid black;
+        transition:background 200ms ease-in-out;
+
+        &:hover{
+            background-color: rgb(13, 131, 76);
+        }
+        &:active{
+            background-color: rgb(6, 180, 99);
+        }
+    }
+}
