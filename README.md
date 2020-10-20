@@ -26,6 +26,7 @@
     - [x] Create placeholder chats DB.
     - [x] Setup Socket IO server.
     - [x] Online user communication.
+    - [] Connect to mongoDB cluster.
     - [] Implement Wait Queues for offline users.
 
 ##### Other (Or Common)
