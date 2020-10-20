@@ -4,7 +4,7 @@ const cors = require("cors")
 const http = require("http")
 const socketIO = require("socket.io")
 // const { ExpressPeerServer } = require("peer")
-const { v4: uuid } = require("uuid")
+// const { v4: uuid } = require("uuid")
 
 app = express()
 server = http.Server(app)
@@ -32,16 +32,19 @@ io.on('connection', function (socket) {
     console.log('A new client connected', socket.id);
 
     socket.on('logged-in', userID => {
+        console.log('[logged-in]: userID: ', userID)
         userIDToSocketMap[userID] = socket
     })
 
     socket.on('send-message', msgObjectString => {
         let msgObject = JSON.parse(msgObjectString)
+        console.log("[send-message]: Received a new message.", msgObject)
         let { receiverID } = { ...msgObject }
 
         if (receiverID in userIDToSocketMap) {
             let receiverSocket = userIDToSocketMap[receiverID]
             receiverSocket.emit('received-message', msgObjectString)
+            socket.emit('message-sent')
         } else {
             let reason = "Reciever is offline!"
             socket.emit('message-not-sent', reason, receiverID)
