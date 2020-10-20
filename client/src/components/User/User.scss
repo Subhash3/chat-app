@@ -1,0 +1,34 @@
+.user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+    cursor: pointer;
+    transition: background 100ms ease-in-out;
+    color: white;
+
+    &:hover{
+        box-shadow: 1px 1px 5px rgb(24, 8, 46);
+    }
+
+    .image{
+        --size: 30px;
+        width: var(--size);
+        height: var(--size);
+        // border: 1px solid black;
+        border-radius: 50%;
+        background-color: white;
+    }
+
+    .name {
+        font-size: 15px;
+        font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        margin-left: 10px;
+        text-transform: capitalize;
+    }
+
+    &.active{
+        background-color: rgb(24, 8, 46);
+    }
+}
