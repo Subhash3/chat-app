@@ -6,24 +6,27 @@ import UsersProvider from './contexts/UsersProvider'
 import CurrentUserProvider from './contexts/CurrentUserProvider'
 import ActiveConversationProvider from './contexts/ActiveConversationProvider'
 import ChatDBProvider from './contexts/ChatDBProvider'
+import SocketProvider from './contexts/SocketProvider'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 function App() {
   return (
     <UsersProvider>
       <ActiveConversationProvider>
-        <CurrentUserProvider>
-          <ChatDBProvider>
-            <div className="App">
-              <Router>
-                <Switch>
-                  <Route exact path='/' component={ChatWindow}></Route>
-                  <Route path='/login' component={LoginForm} ></Route>
-                </Switch>
-              </Router>
-            </div>
-          </ChatDBProvider>
-        </CurrentUserProvider>
+        <SocketProvider>
+          <CurrentUserProvider>
+            <ChatDBProvider>
+              <div className="App">
+                <Router>
+                  <Switch>
+                    <Route exact path='/' component={ChatWindow}></Route>
+                    <Route path='/login' component={LoginForm} ></Route>
+                  </Switch>
+                </Router>
+              </div>
+            </ChatDBProvider>
+          </CurrentUserProvider>
+        </SocketProvider>
       </ActiveConversationProvider>
     </UsersProvider>
   );
