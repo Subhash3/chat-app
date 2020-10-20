@@ -26,12 +26,12 @@
 - [x] Create placeholder chats DB.
 - [x] Setup Socket IO server.
 - [x] Online user communication.
-- [] Connect to mongoDB cluster.
-- [] Implement Wait Queues for offline users.
+- [ ] Connect to mongoDB cluster.
+- [ ] Implement Wait Queues for offline users.
   
 ##### Other (Or Common)
-- [] Differentiate sent, pending and unset message.
-- [] Differentiate between active and inactive(offline) users.
-- [] Differentiate read and unread messages.
+- [ ] Differentiate sent, pending and unset message.
+- [ ] Differentiate between active and inactive(offline) users.
+- [ ] Differentiate read and unread messages.
   
 ##### Feel free to contibute and open any issues.
