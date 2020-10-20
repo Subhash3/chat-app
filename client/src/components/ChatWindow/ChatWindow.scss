@@ -37,27 +37,5 @@
             box-shadow: inset 1px 1px 5px #18082e;
             // border: 1px solid black;
         }
-        
-        .new-msg-form{
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            background-color: #fafafa;
-            height: 60px;
-            align-items: center;
-            padding: 10px;
-
-            input{
-                width: 70%;
-                height: 60%;
-            }
-            button{
-                width: 100px;
-                height: 60%;
-                padding: 10px;
-                // border: 1px solid black;
-            }
-        }
     }
 }

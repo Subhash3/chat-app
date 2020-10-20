@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm/LoginForm'
 import UsersProvider from './contexts/UsersProvider'
 import CurrentUserProvider from './contexts/CurrentUserProvider'
 import ActiveConversationProvider from './contexts/ActiveConversationProvider'
+import ChatDBProvider from './contexts/ChatDBProvider'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 function App() {
@@ -12,14 +13,16 @@ function App() {
     <UsersProvider>
       <ActiveConversationProvider>
         <CurrentUserProvider>
-          <div className="App">
-            <Router>
-              <Switch>
-                <Route exact path='/' component={ChatWindow}></Route>
-                <Route path='/login' component={LoginForm} ></Route>
-              </Switch>
-            </Router>
-          </div>
+          <ChatDBProvider>
+            <div className="App">
+              <Router>
+                <Switch>
+                  <Route exact path='/' component={ChatWindow}></Route>
+                  <Route path='/login' component={LoginForm} ></Route>
+                </Switch>
+              </Router>
+            </div>
+          </ChatDBProvider>
         </CurrentUserProvider>
       </ActiveConversationProvider>
     </UsersProvider>

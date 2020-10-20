@@ -2,6 +2,7 @@ import React from 'react';
 import UsersList from '../UsersList/UsersList'
 import LoggedInUserInfo from '../LoggedInUserInfo/LoggedInUserInfo'
 import UserChats from '../UserChats/UserChats'
+import NewMsgForm from '../NewMsgForm/NewMsgForm'
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { Redirect } from 'react-router-dom'
 import './ChatWindow.min.css'
@@ -19,10 +20,7 @@ const ChatWindow = () => {
             <div className="chat-box">
                 <div className="other-user-info"></div>
                 <UserChats />
-                <div className="new-msg-form">
-                    <input type="text" className="new-msg" />
-                    <button className="send-msg"></button>
-                </div>
+                <NewMsgForm />
             </div>
             <div className="toolbar"></div>
         </div>

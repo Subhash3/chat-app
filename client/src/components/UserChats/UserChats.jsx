@@ -1,70 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+// import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
+import { useChatDB } from '../../contexts/ChatDBProvider'
 import './UserChats.min.css'
 
-const messagesDB = [{
-    id: 1,
-    senderID: 2,
-    receiverID: 1,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 2,
-    senderID: 3,
-    receiverID: 1,
-    msgBody: `Nice looking app. I want to make it much more beautiful.
-     So, I keep working on the frontend side until I'm happy with the looks.
-     But I still have to connect it to backend. So, I might wanna skip the fronted for today!`,
-    time: '12:00PM',
-}, {
-    id: 3,
-    senderID: 1,
-    receiverID: 2,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 4,
-    senderID: 1,
-    receiverID: 3,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 5,
-    senderID: 2,
-    receiverID: 4,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 6,
-    senderID: 5,
-    receiverID: 1,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 7,
-    senderID: 1,
-    receiverID: 2,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 8,
-    senderID: 2,
-    receiverID: 1,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-}, {
-    id: 9,
-    senderID: 2,
-    receiverID: 1,
-    msgBody: "Hello bri...!",
-    time: '12:00PM',
-},
-]
-
 const UserChats = () => {
-    const [allChats] = useLocalStorage('user-chats', messagesDB)
+    const [chatDB, setChatDB] = useChatDB()
     const [userChats, setUserChats] = useState([])
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
@@ -72,7 +14,7 @@ const UserChats = () => {
     // console.log({ userChats })
 
     const extractConversations = () => {
-        let conversations = allChats.filter(msgObject => {
+        let conversations = chatDB.filter(msgObject => {
             return (msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
                 || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)
         })
@@ -84,7 +26,7 @@ const UserChats = () => {
 
     useEffect(() => {
         extractConversations()
-    }, [activeConversationID])
+    }, [activeConversationID, chatDB])
 
     return (
         <div className="chats">
