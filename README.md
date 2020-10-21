@@ -20,6 +20,8 @@
 - [x] Create new message form.
 - [x] Connect backend.
 - [x] Setup socket IO Client.
+- [ ] Create a group conversation.
+
 ##### Backend
 - [x] Create a Mongo DB cluster.
 - [x] Create placeholder users DB.
