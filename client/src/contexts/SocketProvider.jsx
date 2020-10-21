@@ -13,7 +13,9 @@ const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(undefined)
 
     useEffect(() => {
-        setSocket(socketIOClient(SOCKET_IO_SERVER))
+        setSocket(socketIOClient(SOCKET_IO_SERVER, {
+            path: '/chat-app'
+        }))
     }, [])
 
 

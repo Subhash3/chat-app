@@ -47,7 +47,7 @@ const LoginForm = (props) => {
         } else {
             let currentUserInfo = {
                 name: formData.username,
-                id: parseInt(formData.userID)
+                id: formData.userID
             }
 
             setCurrentUser(currentUserInfo)

@@ -15,7 +15,7 @@ const ChatWindow = () => {
     useEffect(() => {
         if (socket)
             socket.emit("logged-in", currentUser.id)
-    }, [socket]);
+    }, [socket, currentUser]);
 
     return !currentUser ? <Redirect to='/login' /> : (
         <div className="chat-window">

@@ -3,17 +3,23 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const http = require("http")
 const socketIO = require("socket.io")
-// const { ExpressPeerServer } = require("peer")
+const dotenv = require("dotenv")
+const { chatRouter } = require('./Routes/chat_router')
 // const { v4: uuid } = require("uuid")
 
-app = express()
-server = http.Server(app)
-io = socketIO(server, { origins: '*:*' }) // I don't understand this part :(
+// Configure dotenv (.env)
+dotenv.config()
+
+const app = express()
+const server = http.Server(app)
+const io = socketIO(server, {
+    origins: '*:*',
+    path: '/chat-app'
+}) // I don't understand this part :(
 
 // global variables
 const PORT = 3000
 const MONGO_URI = "mongodb+srv://Shine:<password>@cluster0.1kbpx.mongodb.net/<dbname>?retryWrites=true&w=majority"
-const welcomeMessage = "Welcome to Shine's chat app!"
 let userIDToSocketMap = {}
 // let userIDToWaitQueueMap = {}
 
@@ -23,9 +29,9 @@ app.use(bodyParser.json())
 // Middleware to resolve cors!
 app.use(cors())
 
-app.get('/', (req, res) => {
-    res.send({ "msg": welcomeMessage })
-})
+/*Custom Routes*/
+// Router setup for chat-app
+app.use('/chat-app', chatRouter)
 
 // listen on the connection event for incoming sockets
 io.on('connection', function (socket) {
@@ -57,13 +63,6 @@ server.listen(PORT, function () {
     var port = server.address().port
     console.log("Example app listening at http://<%s>:%s", host, port)
 })
-
-
-// // Peerjs Connections
-// peerServer.on('connection', (client) => {
-//     console.log("(PeerJS): Got a connection from", client.id)
-//     // peerServer.emit('open', client.id)
-// })
 
 /** SOCKET IO CHEATSHEET **/
 //  // send to current request socket client

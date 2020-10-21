@@ -24,7 +24,7 @@ const UsersList = () => {
     const handleClick = (e) => {
         // console.log("Convo has been clicked", e.target)
         let userID = e.target.dataset.userId
-        userID = parseInt(userID)
+        userID = userID
         // console.log({ userID })
         setActiveConversationID(userID)
     }
