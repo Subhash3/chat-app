@@ -3,6 +3,7 @@ import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useChatDB } from '../../contexts/ChatDBProvider'
 import { useSocket } from '../../contexts/SocketProvider'
+import { v4 as uuid } from 'uuid'
 import './NewMsgForm.min.css'
 
 const NewMsgForm = () => {
@@ -12,9 +13,11 @@ const NewMsgForm = () => {
     const [activeConversationID] = useActiveConversation()
     const socket = useSocket()
 
+    console.log("rendering NEW_MSG_FORM")
+
     const sendMessage = (msgBody) => {
         let msgObject = {
-            id: chatDB.length + 1,
+            id: uuid(),
             senderID: currentUser.id,
             receiverID: activeConversationID,
             msgBody,

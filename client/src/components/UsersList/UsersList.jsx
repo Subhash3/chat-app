@@ -11,6 +11,7 @@ const UsersList = () => {
     const [activeConversationID, setActiveConversationID] = useActiveConversation()
 
     // console.log({ users })
+    console.log("rendering USERS_LIST")
 
     const removeThisUserFromUsersList = (thisUser) => {
         let newUsersList = users.filter(user => user.id !== thisUser.id)

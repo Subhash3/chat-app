@@ -1,4 +1,5 @@
 import React, { useState, useContext, createContext } from 'react';
+// import { useSessionStorage } from '../hooks/useSessionStorage'
 
 const ChatDBContext = createContext()
 
@@ -24,56 +25,56 @@ const messagesDB = [
         id: 1,
         senderID: '2',
         receiverID: '1',
-        msgBody: "Hello bri...!",
+        msgBody: "ABCD",
         time: '12:00PM',
     },
     {
         id: 2,
         senderID: '2',
         receiverID: '3',
-        msgBody: "Hello bri...!",
+        msgBody: "EFGH",
         time: '12:00PM',
     },
     {
         id: 3,
         senderID: '1',
         receiverID: '2',
-        msgBody: "Hello bri...!",
+        msgBody: "IJKL",
         time: '12:00PM',
     },
     {
         id: 4,
         senderID: '4',
         receiverID: '1',
-        msgBody: "Hello bri...!",
+        msgBody: "MNOP",
         time: '12:00PM',
     },
     {
         id: 1,
         senderID: '2',
         receiverID: '4',
-        msgBody: "Hello bri...!",
+        msgBody: "QRST",
         time: '12:00PM',
     },
     {
         id: 5,
         senderID: '2',
         receiverID: '3',
-        msgBody: "Hello bri...!",
+        msgBody: "UVW",
         time: '12:00PM',
     },
     {
         id: 6,
         senderID: '1',
         receiverID: '4',
-        msgBody: "Hello bri...!",
+        msgBody: "XYZ",
         time: '12:00PM',
     },
     {
         id: 7,
         senderID: '5',
         receiverID: '1',
-        msgBody: "Hello bri...!",
+        msgBody: "Hell",
         time: '12:00PM',
     },
 ]

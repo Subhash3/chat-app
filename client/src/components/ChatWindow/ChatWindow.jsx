@@ -12,6 +12,8 @@ const ChatWindow = () => {
     const [currentUser] = useCurrentUser()
     const socket = useSocket()
 
+    console.log("rendering CHAT_WINDOW")
+
     useEffect(() => {
         if (socket)
             socket.emit("logged-in", currentUser.id)
