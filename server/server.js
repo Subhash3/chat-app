@@ -5,27 +5,26 @@ const http = require("http")
 const socketIO = require("socket.io")
 const dotenv = require("dotenv")
 const { chatRouter } = require('./Routes/chat_router')
+const { chatAppHandler } = require("./socket_IO_paths/chat_app_handler")
 // const { v4: uuid } = require("uuid")
 
 // Configure dotenv (.env)
 dotenv.config()
 
+// global variables
+const PORT = 3000
 const app = express()
 const server = http.Server(app)
-const io = socketIO(server, {
+// const MONGO_URI = "mongodb+srv://Shine:<password>@cluster0.1kbpx.mongodb.net/<dbname>?retryWrites=true&w=majority"
+
+const chatIO = socketIO(server, {
     origins: '*:*',
     path: '/chat-app'
 }) // I don't understand this part :(
 
-// global variables
-const PORT = 3000
-const MONGO_URI = "mongodb+srv://Shine:<password>@cluster0.1kbpx.mongodb.net/<dbname>?retryWrites=true&w=majority"
-let userIDToSocketMap = {}
-// let userIDToWaitQueueMap = {}
-
+/* Express Middleware */
 // Middleware to parse search params
 app.use(bodyParser.json())
-
 // Middleware to resolve cors!
 app.use(cors())
 
@@ -33,30 +32,8 @@ app.use(cors())
 // Router setup for chat-app
 app.use('/chat-app', chatRouter)
 
-// listen on the connection event for incoming sockets
-io.on('connection', function (socket) {
-    console.log('A new client connected', socket.id);
-
-    socket.on('logged-in', userID => {
-        console.log('[logged-in]: userID: ', userID)
-        userIDToSocketMap[userID] = socket
-    })
-
-    socket.on('send-message', msgObjectString => {
-        let msgObject = JSON.parse(msgObjectString)
-        console.log("[send-message]: Received a new message.", msgObject)
-        let { receiverID } = { ...msgObject }
-
-        if (receiverID in userIDToSocketMap) {
-            let receiverSocket = userIDToSocketMap[receiverID]
-            receiverSocket.emit('received-message', msgObjectString)
-            socket.emit('message-sent')
-        } else {
-            let reason = "Reciever is offline!"
-            socket.emit('message-not-sent', reason, receiverID)
-        }
-    })
-});
+// Setup socketIO handlers
+chatAppHandler(chatIO)
 
 server.listen(PORT, function () {
     var host = server.address().address
