@@ -28,6 +28,8 @@
 - [x] Online user communication.
 - [ ] Connect to mongoDB cluster.
 - [ ] Implement Wait Queues for offline users.
+- [ ] Create a group functionality.
+- [ ] Add users to group.
   
 ##### Other (Or Common)
 - [ ] Differentiate sent, pending and unset message.
