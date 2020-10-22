@@ -4,19 +4,31 @@ import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useChatDB } from '../../contexts/ChatDBProvider'
 import { useSocket } from '../../contexts/SocketProvider'
+import { chatAPI } from '../../Apis/chatApi'
+// import { useUserChats } from '../../contexts/UserChatsProvider'
 import { v4 as uuid } from 'uuid'
 import './UserChats.min.css'
 
 const UserChats = () => {
     const [chatDB, setChatDB] = useChatDB()
-    const [userChats, setUserChats] = useState([])
+    const [userChats, setUserChats] = useState()
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
     const socket = useSocket()
 
     console.log("rendering USER_CHATS")
     // console.log({ userChats })
-    console.log({ chatDB })
+    // console.log({ chatDB })
+
+    const getChatDB = async () => {
+        let response = await chatAPI.get('/chats')
+        console.log(response.data)
+        setChatDB(response.data)
+    }
+
+    useEffect(() => {
+        getChatDB()
+    }, [])
 
     useEffect(() => {
         const extractConversations = () => {
@@ -52,9 +64,7 @@ const UserChats = () => {
                 console.log("[received-message]: Received message:", msgObject)
 
                 msgObject.id = uuid()
-                console.log(chatDB[0])
-                console.log(msgObject)
-                // setChatDB([...chatDB, msgObject])
+                setChatDB([...chatDB, msgObject])
             })
 
             socket.on('flush-messages', allMessagesStringified => {

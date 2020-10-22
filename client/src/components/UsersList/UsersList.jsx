@@ -3,6 +3,7 @@ import { useUsers } from '../../contexts/UsersProvider'
 import User from '../User/User.jsx'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
+import { chatAPI } from '../../Apis/chatApi'
 import './UsersList.min.css'
 
 const UsersList = () => {
@@ -13,13 +14,23 @@ const UsersList = () => {
     // console.log({ users })
     console.log("rendering USERS_LIST")
 
-    const removeThisUserFromUsersList = (thisUser) => {
-        let newUsersList = users.filter(user => user.id !== thisUser.id)
+    const removeThisUserFromUsersList = (usersList, thisUser) => {
+        let newUsersList = usersList.filter(user => user.id !== thisUser.id)
         setUsers(newUsersList)
     }
 
+    const getUsers = async () => {
+        try {
+            let response = await chatAPI.get('/users')
+            let usersList = response.data
+            removeThisUserFromUsersList(usersList, currentUser)
+        } catch (err) {
+            console.log("Errot while getting users..", err)
+        }
+    }
+
     useEffect(() => {
-        removeThisUserFromUsersList(currentUser)
+        getUsers()
     }, [currentUser])
 
     const handleClick = (e) => {
@@ -32,11 +43,23 @@ const UsersList = () => {
 
     return (
         <div className="users-list">
-            {users.map(user => {
-                return <User user={user} key={user.id} handleClick={handleClick} active={user.id === activeConversationID} />
-            })}
+            {
+                (users.length === 0) ? (
+                    <LoadingUsers />
+                ) : (
+                        users.map(user => {
+                            return <User user={user} key={user.id} handleClick={handleClick} active={user.id === activeConversationID} />
+                        })
+                    )
+            }
         </div>
     );
+}
+
+const LoadingUsers = () => {
+    return (
+        <div className="loading-users"></div>
+    )
 }
 
 export default UsersList;

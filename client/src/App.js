@@ -7,12 +7,14 @@ import CurrentUserProvider from './contexts/CurrentUserProvider'
 import ActiveConversationProvider from './contexts/ActiveConversationProvider'
 import ChatDBProvider from './contexts/ChatDBProvider'
 import SocketProvider from './contexts/SocketProvider'
+// import UserChatsProvider from './contexts/UserChatsProvider'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 function App() {
   return (
     <UsersProvider>
       <ActiveConversationProvider>
+        {/* <UserChatsProvider> */}
         <SocketProvider>
           <CurrentUserProvider>
             <ChatDBProvider>
@@ -27,6 +29,7 @@ function App() {
             </ChatDBProvider>
           </CurrentUserProvider>
         </SocketProvider>
+        {/* </UserChatsProvider> */}
       </ActiveConversationProvider>
     </UsersProvider>
   );
