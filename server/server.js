@@ -29,9 +29,9 @@ const chatIO = socketIO(server, {
 app.use(bodyParser.json()) // Middleware to parse search params
 app.use(cors()) // Middleware to resolve cors!
 
-app.get('/', (req, res) => {
-    res.send("Hello!")
-})
+// app.get('/', (req, res) => {
+//     res.send("Hello!")
+// })
 
 /*Custom Routes*/
 app.use('/chat-app', chatRouter) // Router setup for chat-app
@@ -43,6 +43,7 @@ chatAppHandler(chatIO)
 connectToMongoDBAtlas(MONGO_CONFIG)
 
 if (process.env.NODE_ENV === 'production') {
+    console.log("PRODUCTION ENVIROMENT DETECTED!")
     app.use(express.static('../client/build'))
 
     app.get('*', (req, res) => {
