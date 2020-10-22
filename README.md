@@ -30,7 +30,7 @@
 - [x] Online user communication.
 - [x] Implement Wait Queues for offline users.
 - [x] Connect to mongoDB cluster.
-- [ ] Insert new Message into Database.
+- [x] Insert new Message into Database.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
   
