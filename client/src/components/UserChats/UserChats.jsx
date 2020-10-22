@@ -8,6 +8,7 @@ import { chatAPI } from '../../Apis/chatApi'
 // import { useUserChats } from '../../contexts/UserChatsProvider'
 import { v4 as uuid } from 'uuid'
 import './UserChats.min.css'
+import { useRef } from 'react';
 
 const UserChats = () => {
     const [chatDB, setChatDB] = useChatDB()
@@ -15,6 +16,7 @@ const UserChats = () => {
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
     const socket = useSocket()
+    const chatsRef = useRef()
 
     console.log("rendering USER_CHATS")
     // console.log({ userChats })
@@ -29,6 +31,10 @@ const UserChats = () => {
     useEffect(() => {
         getChatDB()
     }, [])
+
+    useEffect(() => {
+        chatsRef.current.scroll(0, chatsRef.current.scrollTopMax)
+    }, [userChats])
 
     useEffect(() => {
         const extractConversations = () => {
@@ -64,7 +70,8 @@ const UserChats = () => {
                 console.log("[received-message]: Received message:", msgObject)
 
                 msgObject.id = uuid()
-                setChatDB([...chatDB, msgObject])
+                // setChatDB([...chatDB, msgObject])
+                getChatDB()
             })
 
             socket.on('flush-messages', allMessagesStringified => {
@@ -90,7 +97,7 @@ const UserChats = () => {
     }
 
     return (
-        <div className="chats">
+        <div ref={chatsRef} className="chats">
             {activeConversationID ? (userChats.map(chatObject => {
                 return <Message key={chatObject.id} msgObject={chatObject} />
             }))

@@ -35,6 +35,9 @@
 .chats{
     padding: 10px;
     position: relative;
+    // border: 3px solid yellow;
+    scroll-behavior: scroll;
+    overflow-y: auto;
 }
 
 .select-chat{
