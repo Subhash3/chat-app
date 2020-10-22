@@ -1,3 +1,5 @@
+const { ChatsModel } = require('../Models/chats')
+
 const chatAppHandler = (io) => {
     let userIDToSocketMap = {}
     let userIDToWaitQueueMap = {}
@@ -35,6 +37,29 @@ const chatAppHandler = (io) => {
         return
     }
 
+    const insertIntoDB = (msgObject) => {
+        // let chatObject = new ChatsModel(msgObject)
+        // let dbPromise = chatObject.save()
+
+        let dbPromise = ChatsModel.create(msgObject)
+        return dbPromise
+    }
+
+    // const insertFlushedMessagesIntoDB = (userID) => {
+    //     let allStringifiedMessages = userIDToWaitQueueMap[userID]
+    //     if (!allStringifiedMessages) {
+    //         return new Promise((resolve, reject) => {
+    //             resolve("Wait queue is empty. No need to write to db")
+    //         })
+    //     }
+    //     let allMessages = allStringifiedMessages.map(messageString => {
+    //         return JSON.parse(messageString)
+    //     })
+
+    //     let dbPromise = ChatsModel.insertMany(allMessages)
+    //     return dbPromise
+    // }
+
     // listen on the connection event for incoming sockets
     io.on('connection', function (socket) {
         console.log('A new client connected', socket.id);
@@ -43,6 +68,14 @@ const chatAppHandler = (io) => {
             console.log('[logged-in]: userID: ', userID)
             userIDToSocketMap[userID] = socket
             flushMessagesToUser(socket, userID)
+            // insertFlushedMessagesIntoDB(userID)
+            //     .then((data) => {
+            //         console.log("Data has been flushed out and written into db.! : ", JSON.stringify(data))
+            //         userIDToWaitQueueMap[userID] = []
+            //     })
+            //     .catch(err => {
+            //         console.log("Error while writing flushed messages into db", err)
+            //     })
             console.log('[logged-in]: Wait Queue: ', userIDToWaitQueueMap[userID])
             userIDToWaitQueueMap[userID] = []
         })
@@ -52,10 +85,19 @@ const chatAppHandler = (io) => {
             console.log("[send-message]: Received a new message.", msgObject)
             let { receiverID } = { ...msgObject }
 
+            insertIntoDB(msgObject)
+                .then((data) => {
+                    console.log("Messages has been inserted", data)
+                })
+                .catch((error) => {
+                    console.log("Error while inserting", error)
+                    socket.emit('message-not-sent', JSON.stringify(error), receiverID)
+                    return
+                })
+
             if (receiverID in userIDToSocketMap) {
                 let receiverSocket = userIDToSocketMap[receiverID]
                 receiverSocket.emit('received-message', msgObjectString)
-                socket.emit('message-sent')
             } else {
                 let reason = "Reciever is offline!"
                 addMessageToWaitQueue(msgObjectString, receiverID)
