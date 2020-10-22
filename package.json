@@ -1,0 +1,25 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "Chat application for 'theyoungminds.org'",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "cd server && npm run devStart",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "chat-app": "concurrently --names \"CLIENT,SERVER\" -c \"blue.bold,green.bold\" \"npm run client\" \"npm run server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Subhash3/chat-app.git"
+  },
+  "author": "Subhash Sarangi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Subhash3/chat-app/issues"
+  },
+  "homepage": "https://github.com/Subhash3/chat-app#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
