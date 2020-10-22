@@ -29,7 +29,7 @@
 - [x] Setup Socket IO server.
 - [x] Online user communication.
 - [x] Implement Wait Queues for offline users.
-- [ ] Connect to mongoDB cluster.
+- [x] Connect to mongoDB cluster.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
   
