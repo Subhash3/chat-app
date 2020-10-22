@@ -1,0 +1,16 @@
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const chatsSchema = new Schema({
+    _id: mongoose.Types.ObjectId,
+    senderID: String,
+    receiverID: String,
+    msgBody: String,
+    time: String,
+})
+
+const Chat = mongoose.model('chats', chatsSchema)
+
+module.exports = {
+    ChatsModel: Chat
+}

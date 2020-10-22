@@ -5,7 +5,9 @@ const http = require("http")
 const socketIO = require("socket.io")
 const dotenv = require("dotenv")
 const { chatRouter } = require('./Routes/chat_router')
-const { chatAppHandler } = require("./socket_IO_paths/chat_app_handler")
+const { chatAppHandler } = require("./socket_IO_handlers/chat_app_handler")
+const { connectToMongoDBAtlas } = require('./mongo_connection')
+const { UsersModel } = require('./Models/users')
 // const { v4: uuid } = require("uuid")
 
 // Configure dotenv (.env)
@@ -15,25 +17,29 @@ dotenv.config()
 const PORT = 3000
 const app = express()
 const server = http.Server(app)
-// const MONGO_URI = "mongodb+srv://Shine:<password>@cluster0.1kbpx.mongodb.net/<dbname>?retryWrites=true&w=majority"
+const MONGO_CONFIG = JSON.parse(process.env.MONGO_CONFIG)
 
 const chatIO = socketIO(server, {
     origins: '*:*',
-    path: '/chat-app'
-}) // I don't understand this part :(
+    path: '/chat-app-socket.io'
+}, ['polling', 'websocket']) // I don't understand this part :(
 
 /* Express Middleware */
-// Middleware to parse search params
-app.use(bodyParser.json())
-// Middleware to resolve cors!
-app.use(cors())
+app.use(bodyParser.json()) // Middleware to parse search params
+app.use(cors()) // Middleware to resolve cors!
+
+app.get('/', (req, res) => {
+    res.send("Hello!")
+})
 
 /*Custom Routes*/
-// Router setup for chat-app
-app.use('/chat-app', chatRouter)
+app.use('/chat-app', chatRouter) // Router setup for chat-app
 
-// Setup socketIO handlers
+/* Setup socketIO handlers */
 chatAppHandler(chatIO)
+
+/*MongoDB*/
+connectToMongoDBAtlas(MONGO_CONFIG)
 
 server.listen(PORT, function () {
     var host = server.address().address
