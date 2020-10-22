@@ -7,14 +7,15 @@ const dotenv = require("dotenv")
 const { chatRouter } = require('./Routes/chat_router')
 const { chatAppHandler } = require("./socket_IO_handlers/chat_app_handler")
 const { connectToMongoDBAtlas } = require('./mongo_connection')
-const { UsersModel } = require('./Models/users')
+const path = require('path')
+// const { UsersModel } = require('./Models/users')
 // const { v4: uuid } = require("uuid")
 
 // Configure dotenv (.env)
 dotenv.config()
 
 // global variables
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const app = express()
 const server = http.Server(app)
 const MONGO_CONFIG = JSON.parse(process.env.MONGO_CONFIG)
@@ -40,6 +41,14 @@ chatAppHandler(chatIO)
 
 /*MongoDB*/
 connectToMongoDBAtlas(MONGO_CONFIG)
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../client/build'))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../', 'client', 'build', 'index.html'))
+    })
+}
 
 server.listen(PORT, function () {
     var host = server.address().address
