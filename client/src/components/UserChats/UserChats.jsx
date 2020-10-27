@@ -18,43 +18,47 @@ const UserChats = () => {
     const socket = useSocket()
     const chatsRef = useRef()
 
-    console.log("rendering USER_CHATS")
+    // console.log("rendering USER_CHATS")
     // console.log({ userChats })
     // console.log({ chatDB })
 
-    const getChatDB = async (userID) => {
+    const getChatDB = async () => {
+        let userID = currentUser.id
         let response = await chatAPI.get(`/chats/${userID}`)
         // console.log(response.data)
         setChatDB(response.data)
     }
 
     useEffect(() => {
-        getChatDB(currentUser.id)
+        getChatDB()
     }, [])
 
     useEffect(() => {
         chatsRef.current.scroll(0, chatsRef.current.scrollTopMax)
     }, [userChats])
 
+    // useEffect(() => {
+    //     console.log("-----ChatDB changed!-----")
+    //     console.log("ChatDB: ", chatDB)
+    // }, [chatDB])
+
+    const extractConversations = () => {
+        console.log("Extracting convos")
+        // console.log("Chat DB Length: ", chatDB.length)
+        let conversations = chatDB.filter(msgObject => {
+            // console.log(msgObject.senderID, msgObject.receiverID, currentUser.id, activeConversationID, msgObject.msgBody)
+            // if ((msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
+            //     || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)) {
+            //     console.log("Meets")
+            // }
+            return (msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
+                || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)
+        })
+
+        setUserChats(conversations)
+    }
+
     useEffect(() => {
-        const extractConversations = () => {
-            console.log("Extracting convos")
-            console.log("Chat DB Length: ", chatDB.length)
-            let conversations = chatDB.filter(msgObject => {
-                console.log(msgObject.senderID, msgObject.receiverID, currentUser.id, activeConversationID, msgObject.msgBody)
-                if ((msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
-                    || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)) {
-                    console.log("Meets")
-                }
-                return (msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
-                    || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)
-            })
-
-            // console.log(currentUser, activeConversationID)
-            // console.log({ conversations })
-            setUserChats(conversations)
-        }
-
         extractConversations()
     }, [activeConversationID, chatDB, currentUser.id, socket])
 
@@ -75,7 +79,7 @@ const UserChats = () => {
                 console.log("[received-message]: Received message:", msgObject)
 
                 msgObject.id = uuid()
-                setChatDB([...chatDB, msgObject])
+                getChatDB()
             })
 
             socket.on('flush-messages', allMessagesStringified => {

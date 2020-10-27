@@ -14,7 +14,7 @@ const NewMsgForm = () => {
     const socket = useSocket()
     const inputRef = useRef()
 
-    console.log("rendering NEW_MSG_FORM")
+    // console.log("rendering NEW_MSG_FORM")
 
     useEffect(() => {
         if (inputRef.current) {

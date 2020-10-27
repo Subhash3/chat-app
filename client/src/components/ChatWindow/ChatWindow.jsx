@@ -12,7 +12,7 @@ const ChatWindow = () => {
     const [currentUser] = useCurrentUser()
     const socket = useSocket()
 
-    console.log("rendering CHAT_WINDOW")
+    // console.log("rendering CHAT_WINDOW")
 
     useEffect(() => {
         if (socket)
