@@ -3,6 +3,7 @@ const { ChatsModel } = require('../Models/chats')
 const chatAppHandler = (io) => {
     let userIDToSocketMap = {}
     let userIDToWaitQueueMap = {}
+    let userIDToOnlineStatusMap = {}
 
     const getUserIDFromSocketID = (socketID) => {
         for (userID in userIDToSocketMap) {
@@ -33,6 +34,7 @@ const chatAppHandler = (io) => {
         if (!userID)
             return
 
+        userIDToOnlineStatusMap[userID] = false
         delete userIDToSocketMap[userID]
         return
     }
@@ -67,6 +69,7 @@ const chatAppHandler = (io) => {
         socket.on('logged-in', userID => {
             console.log('[logged-in]: userID: ', userID)
             userIDToSocketMap[userID] = socket
+            userIDToOnlineStatusMap[userID] = true
             flushMessagesToUser(socket, userID)
             // insertFlushedMessagesIntoDB(userID)
             //     .then((data) => {
@@ -78,6 +81,9 @@ const chatAppHandler = (io) => {
             //     })
             console.log('[logged-in]: Wait Queue: ', userIDToWaitQueueMap[userID])
             userIDToWaitQueueMap[userID] = []
+
+            // Inform other users that he is online
+            io.emit('online-statuses', JSON.stringify(userIDToOnlineStatusMap))
         })
 
         socket.on('send-message', msgObjectString => {
@@ -108,6 +114,7 @@ const chatAppHandler = (io) => {
         socket.on('disconnect', (reason) => {
             console.log("Disconnected", socket.id, reason)
             removeUserTraces(socket.id)
+            io.emit('online-statuses', JSON.stringify(userIDToOnlineStatusMap))
         })
     });
 }
