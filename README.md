@@ -36,7 +36,7 @@
   
 ##### Other (Or Common)
 - [ ] Differentiate sent, pending and unset message.
-- [ ] Differentiate between active and inactive(offline) users.
+- [x] Differentiate between active and inactive(offline) users.
 - [ ] Differentiate read and unread messages.
   
 ##### Feel free to contibute and open any issues.
