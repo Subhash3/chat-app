@@ -22,6 +22,7 @@
     }
 
     .name {
+        position: relative;
         font-size: 15px;
         font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
         margin-left: 10px;
@@ -30,5 +31,17 @@
 
     &.active{
         background-color: rgb(24, 8, 46);
+    }
+
+    &.online{
+        .name::after{
+            position: absolute;
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #40c57c;
+            left: 110%;
+        }
     }
 }

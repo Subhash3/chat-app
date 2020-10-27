@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUsers } from '../../contexts/UsersProvider'
 import User from '../User/User.jsx'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
+import { useSocket } from '../../contexts/SocketProvider'
 import { chatAPI } from '../../Apis/chatApi'
 import './UsersList.min.css'
 
@@ -10,6 +11,8 @@ const UsersList = () => {
     const [users, setUsers] = useUsers()
     const [currentUser] = useCurrentUser()
     const [activeConversationID, setActiveConversationID] = useActiveConversation()
+    const [onlineStatus, setOnlineStatus] = useState({})
+    const socket = useSocket()
 
     // console.log({ users })
     // console.log("rendering USERS_LIST")
@@ -33,6 +36,18 @@ const UsersList = () => {
         getUsers()
     }, [currentUser])
 
+    useEffect(() => {
+        // Setup SocketIO events
+        if (socket) {
+            socket.on('online-statuses', (onlineStatusesString) => {
+                let onlineStatuses = JSON.parse(onlineStatusesString)
+                setOnlineStatus(onlineStatuses)
+                console.log(`[online-statuses]: ${onlineStatuses}`)
+            })
+        }
+
+    }, [socket])
+
     const handleClick = (e) => {
         // console.log("Convo has been clicked", e.target)
         let userID = e.target.dataset.userId
@@ -48,7 +63,13 @@ const UsersList = () => {
                     <LoadingUsers />
                 ) : (
                         users.map(user => {
-                            return <User user={user} key={user.id} handleClick={handleClick} active={user.id === activeConversationID} />
+                            return <User
+                                user={user}
+                                key={user.id}
+                                handleClick={handleClick}
+                                active={user.id === activeConversationID}
+                                online={onlineStatus[user.id]}
+                            />
                         })
                     )
             }
