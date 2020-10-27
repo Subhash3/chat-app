@@ -22,14 +22,14 @@ const UserChats = () => {
     // console.log({ userChats })
     // console.log({ chatDB })
 
-    const getChatDB = async () => {
-        let response = await chatAPI.get('/chats')
-        console.log(response.data)
+    const getChatDB = async (userID) => {
+        let response = await chatAPI.get(`/chats/${userID}`)
+        // console.log(response.data)
         setChatDB(response.data)
     }
 
     useEffect(() => {
-        getChatDB()
+        getChatDB(currentUser.id)
     }, [])
 
     useEffect(() => {
@@ -39,8 +39,13 @@ const UserChats = () => {
     useEffect(() => {
         const extractConversations = () => {
             console.log("Extracting convos")
+            console.log("Chat DB Length: ", chatDB.length)
             let conversations = chatDB.filter(msgObject => {
-                // console.log(msgObject.senderID, msgObject.receiverID, currentUser.id, activeConversationID, msgObject.msgBody)
+                console.log(msgObject.senderID, msgObject.receiverID, currentUser.id, activeConversationID, msgObject.msgBody)
+                if ((msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
+                    || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)) {
+                    console.log("Meets")
+                }
                 return (msgObject.senderID === currentUser.id && msgObject.receiverID === activeConversationID)
                     || (msgObject.receiverID === currentUser.id && msgObject.senderID === activeConversationID)
             })
@@ -51,7 +56,7 @@ const UserChats = () => {
         }
 
         extractConversations()
-    }, [activeConversationID, chatDB, currentUser.id])
+    }, [activeConversationID, chatDB, currentUser.id, socket])
 
     useEffect(() => {
 
@@ -70,8 +75,7 @@ const UserChats = () => {
                 console.log("[received-message]: Received message:", msgObject)
 
                 msgObject.id = uuid()
-                // setChatDB([...chatDB, msgObject])
-                getChatDB()
+                setChatDB([...chatDB, msgObject])
             })
 
             socket.on('flush-messages', allMessagesStringified => {

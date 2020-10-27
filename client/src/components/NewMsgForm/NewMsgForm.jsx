@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useChatDB } from '../../contexts/ChatDBProvider'
@@ -12,8 +12,19 @@ const NewMsgForm = () => {
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
     const socket = useSocket()
+    const inputRef = useRef()
 
     console.log("rendering NEW_MSG_FORM")
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
+
+        return () => {
+
+        }
+    }, [activeConversationID, inputRef])
 
     const sendMessage = (msgBody) => {
         let msgObject = {
@@ -49,6 +60,7 @@ const NewMsgForm = () => {
                 className="new-msg"
                 value={newMsg}
                 onChange={handleChange}
+                ref={inputRef}
             />
             <button type="submit" className="send-msg">Send</button>
         </form>

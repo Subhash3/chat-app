@@ -11,8 +11,13 @@ const getListOfUsers = async () => {
     return usersList
 }
 
-const getChats = async () => {
-    let chats = await ChatsModel.find()
+const getChats = async (userID) => {
+    let chats = await ChatsModel.find({
+        $or: [
+            { "senderID": userID },
+            { "receiverID": userID }
+        ]
+    })
     return chats
 }
 
@@ -31,7 +36,13 @@ router.get('/users', (req, res) => {
 })
 
 router.get('/chats', (req, res) => {
-    getChats()
+    res.status(403).send("Access denied!")
+})
+
+router.get('/chats/:userID', (req, res) => {
+    let userID = req.params.userID
+    console.log(`Hit! (/chat-app/chats/${userID})`)
+    getChats(userID)
         .then(chats => {
             res.send(chats)
         })
