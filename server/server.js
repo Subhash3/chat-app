@@ -18,10 +18,10 @@ dotenv.config()
 const PORT = process.env.PORT || 3000
 const app = express()
 const server = http.Server(app)
-console.log("[SERVER]: Getting mongo config var")
-const MONGO_CONFIG = JSON.parse(process.env.MONGO_CONFIG)
-console.log("[SERVER]: ", MONGO_CONFIG)
-console.log("[SERVER]: ", process.env.MONGO_CONFIG)
+// console.log("[SERVER]: Getting mongo config var")
+// const MONGO_CONFIG = JSON.parse(process.env.MONGO_CONFIG)
+// console.log("[SERVER]: ", MONGO_CONFIG)
+// console.log("[SERVER]: ", process.env.MONGO_CONFIG)
 
 const chatIO = socketIO(server, {
     origins: '*:*',
@@ -43,7 +43,11 @@ app.use('/chat-app', chatRouter) // Router setup for chat-app
 chatAppHandler(chatIO)
 
 /*MongoDB*/
-connectToMongoDBAtlas(MONGO_CONFIG)
+let mongoCluster = process.env.MONGO_CLUSTER
+let mongoUser = process.env.MONGO_USER
+let mongoDBname = process.env.MONGO_DB_NAME
+let mongoPassword = process.env.MONGO_ATLAS_PASSWD
+connectToMongoDBAtlas(mongoCluster, mongoUser, mongoPassword, mongoDBname)
 
 if (process.env.NODE_ENV === 'production') {
     console.log("PRODUCTION ENVIROMENT DETECTED!")
