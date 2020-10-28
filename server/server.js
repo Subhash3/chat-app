@@ -19,6 +19,8 @@ const PORT = process.env.PORT || 3000
 const app = express()
 const server = http.Server(app)
 const MONGO_CONFIG = JSON.parse(process.env.MONGO_CONFIG)
+console.log("[SERVER]: ", MONGO_CONFIG)
+console.log("[SERVER]: ", process.env.MONGO_CONFIG)
 
 const chatIO = socketIO(server, {
     origins: '*:*',
