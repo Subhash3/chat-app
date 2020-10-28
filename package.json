@@ -11,7 +11,7 @@
     "build-server": "cd server && npm install",
     "start": "cd server && npm start",
     "chat-app": "concurrently --names \"CLIENT,SERVER\" -c \"blue.bold,green.bold\" \"npm run client\" \"npm run server\"",
-    "heroku-postbuild": "npm run build-server"
+    "heroku-postbuild": "npm run build-client; npm run build-server"
   },
   "repository": {
     "type": "git",
