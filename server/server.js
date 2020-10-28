@@ -18,10 +18,6 @@ dotenv.config()
 const PORT = process.env.PORT || 3000
 const app = express()
 const server = http.Server(app)
-// console.log("[SERVER]: Getting mongo config var")
-// const MONGO_CONFIG = JSON.parse(process.env.MONGO_CONFIG)
-// console.log("[SERVER]: ", MONGO_CONFIG)
-// console.log("[SERVER]: ", process.env.MONGO_CONFIG)
 
 const chatIO = socketIO(server, {
     origins: '*:*',
@@ -61,7 +57,7 @@ if (process.env.NODE_ENV === 'production') {
 server.listen(PORT, function () {
     var host = server.address().address
     var port = server.address().port
-    console.log("Example app listening at http://<%s>:%s", host, port)
+    console.log("[SERVER]: Listening at http://<%s>:%s", host, port)
 })
 
 /** SOCKET IO CHEATSHEET **/
