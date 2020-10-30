@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise
 let MONGO_URI
 
 const connectToMongoDBAtlas = ({ cluster, username, password, dbname }) => {
-    // console.log("Connecting to MongoDB...")
+    console.log("[SERVER]: Connecting to MongoDB...")
     MONGO_URI = `mongodb+srv://${username}:${password}@${cluster}.1kbpx.mongodb.net/${dbname}?retryWrites=true&w=majority`
 
     let mongoConnection = mongoose.connect(MONGO_URI, {
@@ -14,11 +14,11 @@ const connectToMongoDBAtlas = ({ cluster, username, password, dbname }) => {
     })
 
     mongoose.connection.once('open', () => {
-        console.log("Connected to MongoDB.")
+        console.log("[SERVER]: Connected to MongoDB.")
     })
 
     mongoose.connection.on('error', (err) => {
-        console.log("MongoDB error!", err)
+        console.log("[SERVER]: MongoDB error!", err)
     })
 
     return mongoConnection
