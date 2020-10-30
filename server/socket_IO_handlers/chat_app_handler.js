@@ -24,6 +24,7 @@ const chatAppHandler = (io) => {
     }
 
     const flushMessagesToUser = (socket, userID) => {
+        console.log("[SOCKET.IO]: Flushing messages to user", userID)
         let allMessages = userIDToWaitQueueMap[userID]
         let allMessagesStringified = JSON.stringify(allMessages)
         socket.emit('flush-messages', allMessagesStringified)
@@ -47,59 +48,51 @@ const chatAppHandler = (io) => {
         return dbPromise
     }
 
-    // const insertFlushedMessagesIntoDB = (userID) => {
-    //     let allStringifiedMessages = userIDToWaitQueueMap[userID]
-    //     if (!allStringifiedMessages) {
-    //         return new Promise((resolve, reject) => {
-    //             resolve("Wait queue is empty. No need to write to db")
-    //         })
-    //     }
-    //     let allMessages = allStringifiedMessages.map(messageString => {
-    //         return JSON.parse(messageString)
-    //     })
-
-    //     let dbPromise = ChatsModel.insertMany(allMessages)
-    //     return dbPromise
-    // }
-
     // listen on the connection event for incoming sockets
     io.on('connection', function (socket) {
         console.log('[SOCKET.IO]: A new client connected', socket.id);
 
         socket.on('logged-in', userID => {
-            console.log('[logged-in]: userID: ', userID)
+            console.log(".on(logged-in)")
+            console.log('\t[logged-in]: userID: ', userID)
             userIDToSocketMap[userID] = socket
             userIDToOnlineStatusMap[userID] = true
             flushMessagesToUser(socket, userID)
 
-            console.log('[logged-in]: Wait Queue: ', userIDToWaitQueueMap[userID])
+            console.log('\t[logged-in]: Wait Queue: ', userIDToWaitQueueMap[userID])
             userIDToWaitQueueMap[userID] = []
 
             // Inform other users that he is online
+            console.log("\tEmitting [online-statuses] to all users")
             io.emit('online-statuses', JSON.stringify(userIDToOnlineStatusMap))
         })
 
         socket.on('send-message', msgObjectString => {
+            console.log(".on(send-message)")
             let msgObject = JSON.parse(msgObjectString)
-            console.log("[send-message]: Received a new message.", msgObject)
+            console.log("\t[send-message]: Received a new message.", msgObject)
             let { receiverID } = { ...msgObject }
 
             insertIntoDB(msgObject)
                 .then((data) => {
-                    console.log("Messages has been inserted", data)
+                    console.log("\t[SOCKET.IO]: Messages has been inserted", data)
                 })
                 .catch((error) => {
-                    console.log("Error while inserting", error)
+                    console.log("\t[SOCKET.IO]: Error while inserting", error)
+                    console.log("\tEmitting [message-not-sent] to ", receiverID)
                     socket.emit('message-not-sent', JSON.stringify(error), receiverID)
                     return
                 })
 
             if (receiverID in userIDToSocketMap) {
+                console.log("\t[SOCKET.IO]: userIDToSockerMap: ", JSON.stringify(userIDToSocketMap))
                 let receiverSocket = userIDToSocketMap[receiverID]
+                console.log("\tEmitting [received-message] to", receiverID)
                 receiverSocket.emit('received-message', msgObjectString)
             } else {
                 let reason = "Reciever is offline!"
                 addMessageToWaitQueue(msgObjectString, receiverID)
+                console.log("\tEmitting [message-not-sent] to", receiverID)
                 socket.emit('message-not-sent', reason, receiverID)
             }
         })
