@@ -64,21 +64,14 @@ const chatAppHandler = (io) => {
 
     // listen on the connection event for incoming sockets
     io.on('connection', function (socket) {
-        console.log('A new client connected', socket.id);
+        console.log('[SOCKET.IO]: A new client connected', socket.id);
 
         socket.on('logged-in', userID => {
             console.log('[logged-in]: userID: ', userID)
             userIDToSocketMap[userID] = socket
             userIDToOnlineStatusMap[userID] = true
             flushMessagesToUser(socket, userID)
-            // insertFlushedMessagesIntoDB(userID)
-            //     .then((data) => {
-            //         console.log("Data has been flushed out and written into db.! : ", JSON.stringify(data))
-            //         userIDToWaitQueueMap[userID] = []
-            //     })
-            //     .catch(err => {
-            //         console.log("Error while writing flushed messages into db", err)
-            //     })
+
             console.log('[logged-in]: Wait Queue: ', userIDToWaitQueueMap[userID])
             userIDToWaitQueueMap[userID] = []
 
