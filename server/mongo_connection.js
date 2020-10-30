@@ -9,7 +9,7 @@ const connectToMongoDBAtlas = ({ cluster, username, password, dbname }) => {
     console.log(JSON.stringify({ cluster, username, password, dbname }))
     MONGO_URI = `mongodb+srv://${username}:${password}@${cluster}.1kbpx.mongodb.net/${dbname}?retryWrites=true&w=majority`
 
-    let mongoConnection = mongoose.connect(MONGO_URI, {
+    let mongoConnection = mongoose.connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
