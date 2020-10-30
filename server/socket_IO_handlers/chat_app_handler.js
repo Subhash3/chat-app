@@ -85,7 +85,8 @@ const chatAppHandler = (io) => {
                 })
 
             if (receiverID in userIDToSocketMap) {
-                console.log("\t[SOCKET.IO]: userIDToSockerMap: ", JSON.stringify(userIDToSocketMap))
+                // console.log("\t[SOCKET.IO]: userIDToSockerMap: ", JSON.stringify(userIDToSocketMap))
+                console.log("\t[SOCKET.IO]: Reciever is online!", receiverID)
                 let receiverSocket = userIDToSocketMap[receiverID]
                 console.log("\tEmitting [received-message] to", receiverID)
                 receiverSocket.emit('received-message', msgObjectString)
