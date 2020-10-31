@@ -31,6 +31,9 @@
 - [x] Implement Wait Queues for offline users.
 - [x] Connect to mongoDB cluster.
 - [x] Insert new Message into Database.
+- [x] Add Emotes.
+- [ ] Change the color scheme.
+- [ ] Responsiveness.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
   
@@ -38,5 +41,13 @@
 - [ ] Differentiate sent, pending and unset message.
 - [x] Differentiate between active and inactive(offline) users.
 - [ ] Differentiate read and unread messages.
+
+##### Issues
+- [ ] Top message is being instead of the last message in chrome.
+- [ ] Empty messages are also being sent.
+- [ ] Messages are disappearing if we hit back button and login again.
+        But refreshing the page brings back all the messages.
+
+
   
 ##### Feel free to contibute and open any issues.
