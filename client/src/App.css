@@ -1,13 +1,13 @@
 :root{
-  /* --bg-color: #4745B1; */
-  --bg-color: rgb(6, 180, 99);
+  --bg-color: #4745B1;
+  /* --bg-color: rgb(6, 180, 99); */
   --msg-text: white;
-  --other-msg-bg: rgb(17, 13, 78);
-  /* --other-msg-bg: #4745B1; */
-  --my-msg-bg: rgb(194, 100, 116);
-  /* --my-msg-bg: white; */
-  --secondary-bg: #1b3650;
-  /* --secondary-bg: #EEEEFF; */
+  /* --other-msg-bg: rgb(17, 13, 78); */
+  --other-msg-bg: #4745B1;
+  /* --my-msg-bg: rgb(194, 100, 116); */
+  --my-msg-bg: white;
+  /* --secondary-bg: #1b3650; */
+  --secondary-bg: #EEEEFF;
   --dark-secondary-bg: #07131d;
 }
 
