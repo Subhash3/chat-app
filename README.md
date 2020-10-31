@@ -20,6 +20,9 @@
 - [x] Create new message form.
 - [x] Connect backend.
 - [x] Setup socket IO Client.
+- [x] Add Emotes.
+- [x] Change the color scheme.
+- [ ] Responsiveness.
 - [ ] Create a group conversation.
 
 ##### Backend
@@ -31,9 +34,6 @@
 - [x] Implement Wait Queues for offline users.
 - [x] Connect to mongoDB cluster.
 - [x] Insert new Message into Database.
-- [x] Add Emotes.
-- [x] Change the color scheme.
-- [ ] Responsiveness.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
   
