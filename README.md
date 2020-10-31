@@ -32,7 +32,7 @@
 - [x] Connect to mongoDB cluster.
 - [x] Insert new Message into Database.
 - [x] Add Emotes.
-- [ ] Change the color scheme.
+- [x] Change the color scheme.
 - [ ] Responsiveness.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
