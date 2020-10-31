@@ -3,16 +3,18 @@
     flex-direction: row;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid white;
     cursor: pointer;
-    transition: background 100ms ease-in-out;
-    color: white;
+    transition: background 100ms ease-in-out,
+                box-shadow 200ms ease-in-out;
+    color: #4745B1;
 
     &:hover{
-        box-shadow: 1px 1px 5px rgb(24, 8, 46);
+        box-shadow: 1px 1px 2px var(--other-msg-bg);
     }
 
     .image{
+        position: relative;
         --size: 30px;
         width: var(--size);
         height: var(--size);
@@ -30,18 +32,20 @@
     }
 
     &.active{
-        background-color: rgb(24, 8, 46);
+        background-color: var(--other-msg-bg);
+        color: white;
     }
 
     &.online{
-        .name::after{
+        .image::after{
             position: absolute;
             content: '';
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background-color: #40c57c;
-            left: 110%;
+            background-color: var(--bg-color);
+            left: 80%;
+            transform: translate(-50%, -50%);
         }
     }
 }

@@ -8,7 +8,7 @@
 
         .image{
             --size: 45px;
-            border: 4px solid #40c57c;
+            border: 4px solid var(--bg-color);
         }
 
         .name{
