@@ -1,5 +1,5 @@
 const express = require('express')
-const { UsersModel } = require('../Models/users')
+const { LearnersModel } = require('../Models/users')
 const { ChatsModel } = require('../Models/chats')
 
 const router = express.Router()
@@ -7,7 +7,19 @@ const welcomeMessage = "Welcome to Shine's chat app!"
 const mongoError = "Couldn't fetch database!"
 
 const getListOfUsers = async () => {
-    let usersList = await UsersModel.find()
+    // let usersList = await LearnersModel.find({}, {
+    //     email: true,
+    //     name: true
+    // })
+    let usersList = await LearnersModel.aggregate([
+        {
+            "$project": {
+                "email": true,
+                "name": true,
+                "id": "$email"
+            }
+        }
+    ])
     return usersList
 }
 

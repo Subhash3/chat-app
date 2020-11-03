@@ -39,11 +39,11 @@ app.use('/chat-app', chatRouter) // Router setup for chat-app
 chatAppHandler(chatIO)
 
 /*MongoDB*/
-let mongoCluster = process.env.MONGO_CLUSTER
-let mongoUser = process.env.MONGO_USER
-let mongoDBname = process.env.MONGO_DB_NAME
-let mongoPassword = process.env.MONGO_ATLAS_PASSWD
-connectToMongoDBAtlas(mongoCluster, mongoUser, mongoPassword, mongoDBname)
+// let chatsDBURI = process.env.CHATS_MONGO_URI
+// let usersDBURI = process.env.USERS_MONGO_URI
+let YML_MONGO_URI = process.env.YML_MONGO_URI
+connectToMongoDBAtlas(YML_MONGO_URI, "chatsDB")
+// connectToMongoDBAtlas(chatsDBURI, "usersDB")
 
 if (process.env.NODE_ENV === 'production') {
     console.log("PRODUCTION ENVIROMENT DETECTED!")
