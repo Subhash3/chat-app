@@ -29,12 +29,24 @@ const UserChats = () => {
         setChatDB(response.data)
     }
 
+    const scrollToLatestMsg = () => {
+        let chatsWindowProto = chatsRef.current.__proto__
+        let scrollTopMax
+        if (!("scrollTopMax" in chatsWindowProto)) {
+            // console.log("Hiiii:", chatsRef.current.scrollHeight, chatsRef.current.clientHeight)
+            scrollTopMax = chatsRef.current.scrollHeight - chatsRef.current.clientHeight
+        } else {
+            scrollTopMax = chatsRef.current.scrollTopMax
+        }
+        chatsRef.current.scroll(0, scrollTopMax)
+    }
+
     useEffect(() => {
         getChatDB()
     }, [])
 
     useEffect(() => {
-        chatsRef.current.scroll(0, chatsRef.current.scrollTopMax)
+        scrollToLatestMsg()
     }, [userChats])
 
     // useEffect(() => {
