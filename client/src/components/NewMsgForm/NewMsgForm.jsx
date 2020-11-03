@@ -53,6 +53,7 @@ const NewMsgForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (!newMsg) return
         sendMessage(newMsg)
         setNewMsg("")
     }
