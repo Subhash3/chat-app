@@ -23,7 +23,7 @@
 - [x] Add Emotes.
 - [x] Change the color scheme.
 - [x] Fetch users fom db.
-- [ ] Change the msg background and font colors.
+- [x] Change the msg background and font colors.
 - [ ] Responsiveness.
 - [ ] Create a group conversation.
 
