@@ -28,13 +28,20 @@
 
     .chat-box{
         flex-direction: column;
-        background-color: #e3edee;
+        // background-color: #e3edee;
         align-items: center;
         width: 75%;
+        --other-users-info-height: 80px;
+
+        .other-user-info{
+            height: var(--other-users-info-height);
+            background-color: var(--secondary-bg);
+            // border: 1px solid black;
+        }
 
         .chats{
             width: 100%;
-            height: 90%;
+            height: calc( 90% - var(--other-users-info-height) );
             box-shadow: inset 1px 1px 5px var(--other-msg-bg);
             // border: 1px solid black;
         }

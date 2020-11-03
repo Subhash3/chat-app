@@ -22,7 +22,7 @@
     }
 
     &.sender{
-        background-color: var(--my-msg-bg);
+        background-color: var(--secondary-bg);
         margin-left: auto;
         margin-right: 4px;
         border-top-right-radius: 0;
@@ -30,6 +30,7 @@
         border-top-left-radius: 15px;
        border-bottom-left-radius: 0;
        color: var(--other-msg-bg);
+       //    color: var(--other-msg-bg);
     }
 }
 

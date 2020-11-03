@@ -3,7 +3,9 @@ import UsersList from '../UsersList/UsersList'
 import LoggedInUserInfo from '../LoggedInUserInfo/LoggedInUserInfo'
 import UserChats from '../UserChats/UserChats'
 import NewMsgForm from '../NewMsgForm/NewMsgForm'
+import OtherUserInfo from '../OtherUserInfo/OtherUserInfo';
 import { useSocket } from '../../contexts/SocketProvider'
+import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { Redirect } from 'react-router-dom'
 import './ChatWindow.min.css'
@@ -11,6 +13,7 @@ import './ChatWindow.min.css'
 const ChatWindow = () => {
     const [currentUser] = useCurrentUser()
     const socket = useSocket()
+    const [activeConversationID] = useActiveConversation()
 
     // console.log("rendering CHAT_WINDOW")
 
@@ -27,7 +30,7 @@ const ChatWindow = () => {
                 <UsersList />
             </div>
             <div className="chat-box">
-                <div className="other-user-info"></div>
+                {activeConversationID && <OtherUserInfo />}
                 <UserChats />
                 <NewMsgForm />
             </div>
