@@ -5,20 +5,25 @@ import { useActiveConversation } from '../../contexts/ActiveConversationProvider
 import { useChatDB } from '../../contexts/ChatDBProvider'
 import { useSocket } from '../../contexts/SocketProvider'
 import { chatAPI } from '../../Apis/chatApi'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import CachedIcon from '@material-ui/icons/Cached'
+import CancelIcon from '@material-ui/icons/Cancel'
 // import { useUserChats } from '../../contexts/UserChatsProvider'
+import { MSG_PENDING, MSG_SENT, MSG_NOT_SENT } from '../NewMsgForm/NewMsgForm'
 import { v4 as uuid } from 'uuid'
 import './UserChats.min.css'
 import { useRef } from 'react';
 
 const UserChats = () => {
     const [chatDB, setChatDB] = useChatDB()
-    const [userChats, setUserChats] = useState()
+    const [userChats, setUserChats] = useState([])
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
+    const msgIDToStatusMap = {}
     const socket = useSocket()
     const chatsRef = useRef()
 
-    // console.log("rendering USER_CHATS")
+    console.log("rendering USER_CHATS")
     // console.log({ userChats })
     // console.log({ chatDB })
 
@@ -54,6 +59,11 @@ const UserChats = () => {
     //     console.log("ChatDB: ", chatDB)
     // }, [chatDB])
 
+    // const changeMessageState = (msgID, msgStatus) => {
+    //     console.log("Changing the state of the message with ID: ", msgID)
+    //     msgIDToStatusMap[msgID] = msgStatus
+    // }
+
     const extractConversations = () => {
         console.log("Extracting convos")
         // console.log("Chat DB Length: ", chatDB.length)
@@ -78,19 +88,27 @@ const UserChats = () => {
 
         // Setup SocketIO events
         if (socket) {
-            socket.on('message-sent', () => {
-                console.log("[message-sent]: Message Has been sent")
-            })
+            // socket.on('message-sent', (id) => {
+            //     console.log("[message-sent]: Message Has been sent")
+            //     changeMessageState(id, MSG_SENT)
+            //     console.log({ userChats, chatDB })
+            // })
 
-            socket.on('message-not-sent', reason => {
-                console.log("[message-not-sent]: Message has been not sent. : " + reason)
-            })
+            // socket.on('message-not-sent', (reason, id) => {
+            //     console.log("[message-not-sent]: Message has been not sent. : " + reason)
+            //     changeMessageState(id, MSG_NOT_SENT)
+            // })
+
+            // socket.on('pending', (reason, id) => {
+            //     console.log("[pending]: Message pending... : " + reason)
+            //     changeMessageState(id, MSG_PENDING)
+            // })
 
             socket.on('received-message', msbObjectString => {
                 let msgObject = JSON.parse(msbObjectString)
                 console.log("[received-message]: Received message:", msgObject)
 
-                msgObject.id = uuid()
+                // msgObject.id = uuid()
                 getChatDB()
             })
 
@@ -129,14 +147,26 @@ const UserChats = () => {
 const Message = ({ msgObject }) => {
     const [currentUser] = useCurrentUser()
     let isSender = (msgObject.senderID === currentUser.id)
+    let msgStatus = msgObject.status
+    console.log(msgStatus, msgObject.msgBody)
 
     return (
-        <div className={`msg ${isSender ? "sender" : ""}`}>
+        <div className={`msg ${isSender ? "sender" : ""} ${msgStatus}`}>
             {/* <div className="from">From: {msgObject.senderID}</div> */}
             <div className="msg-body">{msgObject.msgBody}</div>
             <div className="time">{msgObject.time}</div>
+            {isSender && <MsgStatusIcon status={msgStatus} />}
         </div>
     )
+}
+
+const MsgStatusIcon = ({ status }) => {
+    if (status === MSG_SENT)
+        return <CheckCircleIcon />
+    else if (status === MSG_NOT_SENT)
+        return <CancelIcon />
+    else if (status === MSG_PENDING)
+        return <CachedIcon />
 }
 
 const SelectAChat = () => {

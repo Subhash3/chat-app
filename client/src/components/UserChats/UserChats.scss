@@ -14,10 +14,12 @@
 
     .msg-body{
         margin-bottom: 3px;
+        word-wrap: anywhere;
     }
 
     .time{
         margin-left: auto;
+        margin-right: 10px;
         font-size: 10px;
     }
 
@@ -30,7 +32,33 @@
         border-top-left-radius: 15px;
        border-bottom-left-radius: 0;
        color: var(--other-msg-bg);
-       //    color: var(--other-msg-bg);
+       position: relative;
+
+       .MuiSvgIcon-root{
+           position: absolute;
+           width: 15px;
+           height: 15px;
+           right: 0;
+           bottom: 0;
+       }
+
+        &.msg-sent{
+            .MuiSvgIcon-root{
+                fill: rgb(79, 214, 79);
+            }
+        }
+
+        &.pending{
+            .MuiSvgIcon-root{
+                fill: rgb(148, 148, 148);
+            }
+        }
+
+        &.msg-not-sent{
+            .MuiSvgIcon-root{
+                fill: rgb(255, 54, 54);
+            }
+        }
     }
 }
 
@@ -40,6 +68,7 @@
     // border: 3px solid yellow;
     scroll-behavior: smooth;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .select-chat{

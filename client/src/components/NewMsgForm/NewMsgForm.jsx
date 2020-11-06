@@ -8,6 +8,10 @@ import SendIcon from '@material-ui/icons/Send';
 import { v4 as uuid } from 'uuid'
 import './NewMsgForm.min.css'
 
+export const MSG_PENDING = "pending"
+export const MSG_SENT = "msg-sent"
+export const MSG_NOT_SENT = "msg-not-sent"
+
 const NewMsgForm = () => {
     const [newMsg, setNewMsg] = useState("")
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false)
@@ -36,6 +40,18 @@ const NewMsgForm = () => {
         }
     };
 
+    const changeMessageState = (msgID, msgStatus) => {
+        console.log("Changing the state of the message with ID: ", msgID)
+        setChatDB((prevChatDB) => {
+            return prevChatDB.map(chatObj => {
+                if (chatObj.id === msgID) {
+                    return { ...chatObj, status: msgStatus }
+                }
+                return chatObj
+            })
+        })
+    }
+
     const sendMessage = (msgBody) => {
         setOpenEmojiPicker(false)
         let msgObject = {
@@ -43,12 +59,29 @@ const NewMsgForm = () => {
             senderID: currentUser.id,
             receiverID: activeConversationID,
             msgBody,
+            status: MSG_PENDING,
             time: new Date().toLocaleString().split(' ')[1],
         }
 
         socket.emit('send-message', JSON.stringify(msgObject))
-
         setChatDB([...chatDB, msgObject])
+
+        socket.on('message-sent', (id) => {
+            console.log("[message-sent]: Message Has been sent")
+            // console.log(chatDB)
+            changeMessageState(id, MSG_SENT)
+        })
+
+        socket.on('message-not-sent', (reason, id) => {
+            console.log("[message-not-sent]: Message has been not sent. : " + reason)
+            changeMessageState(id, MSG_NOT_SENT)
+        })
+
+        socket.on('pending', (reason, id) => {
+            console.log("[pending]: Message pending... : " + reason)
+            changeMessageState(id, MSG_PENDING)
+        })
+
     }
 
     const handleSubmit = (e) => {

@@ -8,6 +8,7 @@ const chatsSchema = new Schema({
     receiverID: String,
     msgBody: String,
     time: String,
+    status: String,
 })
 
 const Chat = mongoose.model('chats', chatsSchema)

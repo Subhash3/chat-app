@@ -1,6 +1,10 @@
 const { ChatsModel } = require('../Models/chats')
 
 const chatAppHandler = (io) => {
+    const MSG_PENDING = "pending"
+    const MSG_SENT = "msg-sent"
+    const MSG_NOT_SENT = "msg-not-sent"
+
     let userIDToSocketMap = {}
     let userIDToWaitQueueMap = {}
     let userIDToOnlineStatusMap = {}
@@ -23,11 +27,38 @@ const chatAppHandler = (io) => {
         }
     }
 
+    const infromSendersThatMessagesAreFlushed = (messagesIDs) => {
+        // db.chats.update({id: {$in: ["1168fe5a-72e4-4506-8467-45060e3ecc46", "57524518-c329-4baa-9163-f94538c8b094"]}}, {$set: {status: "msg-sent"}}, {multi: 1})
+        ChatsModel.update({
+            id: { $in: messagesIDs }
+        }, {
+            $set: {
+                "status": "msg-sent"
+            }
+        }, {
+            multi: true
+        })
+    }
+
     const flushMessagesToUser = (socket, userID) => {
         console.log("[SOCKET.IO]: Flushing messages to user", userID)
         let allMessages = userIDToWaitQueueMap[userID]
         let allMessagesStringified = JSON.stringify(allMessages)
         socket.emit('flush-messages', allMessagesStringified)
+
+        // console.log("All Msgs: ", allMessages)
+        if (!allMessages) return
+
+        let messagesIDToChangeStatus = []
+        for (let msgString of allMessages) {
+            let msg = JSON.parse(msgString)
+            console.log("hihi", msg)
+            messagesIDToChangeStatus.push(msg.id)
+            let senderSocket = userIDToSocketMap[msg.senderID]
+            senderSocket.emit('message-sent', msg.id)
+        }
+
+        infromSendersThatMessagesAreFlushed(messagesIDToChangeStatus)
     }
 
     const removeUserTraces = (socketID) => {
@@ -71,30 +102,45 @@ const chatAppHandler = (io) => {
             console.log(".on(send-message)")
             let msgObject = JSON.parse(msgObjectString)
             console.log("\t[send-message]: Received a new message.", msgObject)
-            let { receiverID } = { ...msgObject }
-
-            insertIntoDB(msgObject)
-                .then((data) => {
-                    console.log("\t[SOCKET.IO]: Messages has been inserted", data)
-                })
-                .catch((error) => {
-                    console.log("\t[SOCKET.IO]: Error while inserting", error)
-                    console.log("\tEmitting [message-not-sent] to ", receiverID)
-                    socket.emit('message-not-sent', JSON.stringify(error), receiverID)
-                    return
-                })
+            let { receiverID, id, senderID } = { ...msgObject }
 
             if (receiverID in userIDToSocketMap) {
                 // console.log("\t[SOCKET.IO]: userIDToSockerMap: ", JSON.stringify(userIDToSocketMap))
                 console.log("\t[SOCKET.IO]: Reciever is online!", receiverID)
-                let receiverSocket = userIDToSocketMap[receiverID]
-                console.log("\tEmitting [received-message] to", receiverID)
-                receiverSocket.emit('received-message', msgObjectString)
+                msgObject.status = MSG_SENT
+
+                insertIntoDB(msgObject)
+                    .then((data) => {
+                        console.log("\t[SOCKET.IO]: Messages has been inserted", data)
+
+                        let receiverSocket = userIDToSocketMap[receiverID]
+                        console.log("\tEmitting [received-message] to", receiverID)
+                        receiverSocket.emit('received-message', msgObjectString)
+                        socket.emit('message-sent', id)
+                    })
+                    .catch((error) => {
+                        console.log("\t[SOCKET.IO]: Error while inserting", error)
+                        console.log("\tEmitting [message-not-sent] to ", receiverID)
+                        socket.emit('message-not-sent', JSON.stringify(error), id)
+                        return
+                    })
             } else {
                 let reason = "Reciever is offline!"
+                msgObject.status = MSG_PENDING // It is the default. But I'm just being explicit.
                 addMessageToWaitQueue(msgObjectString, receiverID)
-                console.log("\tEmitting [message-not-sent] to", receiverID)
-                socket.emit('message-not-sent', reason, receiverID)
+
+                insertIntoDB(msgObject)
+                    .then((data) => {
+                        console.log("\t[SOCKET.IO]: Messages has been inserted", data)
+                        console.log("\tEmitting [pending] to", senderID)
+                        socket.emit('pending', reason, id)
+                    })
+                    .catch((error) => {
+                        console.log("\t[SOCKET.IO]: Error while inserting", error)
+                        console.log("\tEmitting [message-not-sent] to ", receiverID)
+                        socket.emit('message-not-sent', JSON.stringify(error), id)
+                        return
+                    })
             }
         })
 

@@ -29,6 +29,8 @@ const getChats = async (userID) => {
             { "senderID": userID },
             { "receiverID": userID }
         ]
+    }, {
+        _id: false
     })
     return chats
 }

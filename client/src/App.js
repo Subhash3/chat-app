@@ -15,9 +15,9 @@ function App() {
     <UsersProvider>
       <ActiveConversationProvider>
         {/* <UserChatsProvider> */}
-        <SocketProvider>
-          <CurrentUserProvider>
-            <ChatDBProvider>
+        <ChatDBProvider>
+          <SocketProvider>
+            <CurrentUserProvider>
               <div className="App">
                 <Router>
                   <Switch>
@@ -26,9 +26,9 @@ function App() {
                   </Switch>
                 </Router>
               </div>
-            </ChatDBProvider>
-          </CurrentUserProvider>
-        </SocketProvider>
+            </CurrentUserProvider>
+          </SocketProvider>
+        </ChatDBProvider>
         {/* </UserChatsProvider> */}
       </ActiveConversationProvider>
     </UsersProvider>
