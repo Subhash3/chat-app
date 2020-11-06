@@ -24,6 +24,8 @@
 - [x] Change the color scheme.
 - [x] Fetch users fom db.
 - [x] Change the msg background and font colors.
+- [ ] Set up socket IO 'msg-sent', 'msg-pending', and 'msg-not-sent' events.
+- [ ] Separate icons for msg statuses.
 - [ ] Responsiveness.
 - [ ] Create a group conversation.
 
@@ -37,6 +39,10 @@
 - [x] Connect to mongoDB cluster.
 - [x] Insert new Message into Database.
 - [x] Connect to users database.
+- [ ] Add status field to the chats collection.
+- [ ] Set up socket IO 'msg-sent', 'msg-pending', and 'msg-not-sent' events.
+- [ ] Besides flushing messages to a newly logged in user, inform those messages' senders that these messages are now sent.
+- [ ] Setup Wait queues for socket io events as well.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
   
