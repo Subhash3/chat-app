@@ -42,7 +42,8 @@
 - [x] Add status field to the chats collection.
 - [x] Set up socket IO 'msg-sent', 'msg-pending', and 'msg-not-sent' events.
 - [x] Besides flushing messages to a newly logged in user, inform those messages' senders that these messages are now sent.
-- [ ] Setup Wait queues for socket io events as well.
+- [x] Setup Wait queues for socket io events as well.
+- [x] Update messages' statuses on the database after flushing them.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
   
