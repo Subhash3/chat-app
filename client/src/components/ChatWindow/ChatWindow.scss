@@ -17,6 +17,9 @@
         display: flex;
         flex-direction: column;
         width: 25%;
+        height: 100%;
+        min-width: 270px;
+        transition: transform 200ms ease-in-out;
         // overflow-y: auto;
 
         .loggedin-user-info{
@@ -44,6 +47,40 @@
             height: calc( 90% - var(--other-users-info-height) );
             box-shadow: inset 1px 1px 5px var(--other-msg-bg);
             // border: 1px solid black;
+        }
+    }
+}
+
+@media screen and (max-width: 750px){
+    .chat-window{
+        // position: relative;
+
+        .window-sidebar{
+            position: absolute;
+            z-index: 10;
+            box-shadow: 1px 1px 5px var(--other-msg-bg);
+            transform: translateX(-110%);
+
+            &.active{
+                transform: translateX(0%);
+            }
+        }
+     
+        .chat-box{
+            width: 100%;
+
+            .other-user-info{
+                // justify-content: space-between;
+                .image{
+                    margin-left: 20%;
+                }
+            }
+
+            .chats{
+                .toggle-sidebar{
+                    display: grid;
+                }
+            }
         }
     }
 }

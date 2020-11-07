@@ -1,9 +1,10 @@
 .msg{
     max-width: 250px;
+    width: fit-content;
     height: fit-content;
     background-color: var(--other-msg-bg);
     color: var(--msg-text);
-    padding: 5px 10px;
+    padding: 5px 15px;
     display: flex;
     flex-direction: column;
     font-family: monospace;
@@ -63,12 +64,38 @@
 }
 
 .chats{
-    padding: 10px;
+    padding: 40px 10px 10px 10px;
     position: relative;
     // border: 3px solid yellow;
     scroll-behavior: smooth;
     overflow-y: auto;
     overflow-x: hidden;
+
+    .toggle-sidebar{
+        position: fixed;
+        display: none;
+        // display: grid;
+        z-index: 99;
+        top: 0;
+        place-items:  center;
+        width: 30px;
+        height: 30px;
+        opacity: 0.8;
+        background-color: var(--other-msg-bg);
+        transform: translate(-10px, 80px);
+        cursor: pointer;
+        transition: transform 200ms ease-in-out;
+
+        .MuiSvgIcon-root{
+            fill: white;
+            width: 30px;
+            height: 30px;
+        }
+
+        &.move-left{
+            transform: translate(265px, 80px);
+        }
+    }
 }
 
 .select-chat{

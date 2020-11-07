@@ -8,6 +8,7 @@ import { chatAPI } from '../../Apis/chatApi'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import CachedIcon from '@material-ui/icons/Cached'
 import CancelIcon from '@material-ui/icons/Cancel'
+import ContactsIcon from '@material-ui/icons/Contacts';// import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 // import { useUserChats } from '../../contexts/UserChatsProvider'
 import { MSG_PENDING, MSG_SENT, MSG_NOT_SENT } from '../NewMsgForm/NewMsgForm'
 import { v4 as uuid } from 'uuid'
@@ -19,9 +20,10 @@ const UserChats = () => {
     const [userChats, setUserChats] = useState([])
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
-    const msgIDToStatusMap = {}
+    // const msgIDToStatusMap = {}
     const socket = useSocket()
     const chatsRef = useRef()
+    const toggleSidebarRef = useRef()
 
     console.log("rendering USER_CHATS")
     // console.log({ userChats })
@@ -46,9 +48,18 @@ const UserChats = () => {
         chatsRef.current.scroll(0, scrollTopMax)
     }
 
+    const toggleSidebar = (e) => {
+        let sidebar = document.querySelector('.window-sidebar')
+        let toggleButton = document.querySelector('.toggle-sidebar')
+
+        sidebar.classList.toggle('active')
+        toggleButton.classList.toggle('move-left')
+    }
+
     useEffect(() => {
         getChatDB()
-    }, [])
+        toggleSidebarRef.current.addEventListener('click', toggleSidebar)
+    }, [toggleSidebarRef])
 
     useEffect(() => {
         scrollToLatestMsg()
@@ -136,6 +147,9 @@ const UserChats = () => {
 
     return (
         <div ref={chatsRef} className="chats">
+            <div ref={toggleSidebarRef} className={`toggle-sidebar`}>
+                <ContactsIcon />
+            </div>
             {activeConversationID ? (userChats.map(chatObject => {
                 return <Message key={chatObject.id} msgObject={chatObject} />
             }))
