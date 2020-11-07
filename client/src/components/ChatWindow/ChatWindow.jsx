@@ -7,7 +7,7 @@ import OtherUserInfo from '../OtherUserInfo/OtherUserInfo';
 import { useSocket } from '../../contexts/SocketProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
-import { useSidebarRef } from '../../contexts/SidebarRefProvider'
+// import { useSidebarRef } from '../../contexts/SidebarRefProvider'
 import { Redirect } from 'react-router-dom'
 import './ChatWindow.min.css'
 
@@ -25,7 +25,7 @@ const ChatWindow = () => {
 
     return !currentUser ? <Redirect to='/login' /> : (
         <div className="chat-window">
-            <div ref={useSidebarRef} className={`window-sidebar`}>
+            <div className={`window-sidebar`}>
                 <LoggedInUserInfo />
                 <div className="search-bar"></div>
                 <UsersList />
