@@ -60,15 +60,26 @@ const chatAppHandler = (io) => {
 
     const updateMessageStatusOnDatabase = (messagesIDs) => {
         // db.chats.update({id: {$in: ["1168fe5a-72e4-4506-8467-45060e3ecc46", "57524518-c329-4baa-9163-f94538c8b094"]}}, {$set: {status: "msg-sent"}}, {multi: 1})
-        ChatsModel.update({
-            id: { '$in': messagesIDs }
-        }, {
-            '$set': {
-                "status": "msg-sent"
+        console.log("Message Ids to update on database: ", messagesIDs)
+        let mongoUpdatePromise = ChatsModel.updateMany(
+            {
+                'id': { '$in': [...messagesIDs] }
+            },
+            {
+                '$set': {
+                    "status": "msg-sent"
+                }
             }
-        }, {
-            multi: true
-        })
+        )
+
+        mongoUpdatePromise
+            .then((data) => {
+                // console.log("Mongo update worked.", data)
+                console.log("Messages' statuses have been update on database")
+            })
+            .catch(err => {
+                console.log("Mongo update failed", err)
+            })
 
         return
     }
@@ -161,7 +172,7 @@ const chatAppHandler = (io) => {
         socket.on('send-message', msgObjectString => {
             console.log(".on(send-message)")
             let msgObject = JSON.parse(msgObjectString)
-            console.log("\t[send-message]: Received a new message.", msgObject)
+            console.log("\t[send-message]: Received a new message.", msgObjectString)
             let { receiverID, id, senderID } = { ...msgObject }
 
             if (isUserOnline(receiverID)) {
@@ -171,7 +182,8 @@ const chatAppHandler = (io) => {
 
                 insertIntoDB(msgObject)
                     .then((data) => {
-                        console.log("\t[SOCKET.IO]: Messages has been inserted", data)
+                        // console.log("\t[SOCKET.IO]: Messages has been inserted", data)
+                        console.log("\t[SOCKET.IO]: Messages has been inserted")
 
                         let receiverSocket = userIDToSocketMap[receiverID]
                         console.log("\tEmitting [received-message] to", receiverID)
