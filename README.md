@@ -26,7 +26,7 @@
 - [x] Change the msg background and font colors.
 - [x] Set up socket IO 'msg-sent', 'msg-pending', and 'msg-not-sent' events.
 - [x] Separate icons for msg statuses.
-- [ ] Responsiveness.
+- [x] Responsiveness.
 - [ ] Create a group conversation.
 
 ##### Backend
