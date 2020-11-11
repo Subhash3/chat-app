@@ -7,8 +7,8 @@ export const useSocket = () => {
     return useContext(SocketContext)
 }
 
-const SOCKET_IO_SERVER = "http://localhost:3000"
-// const SOCKET_IO_SERVER = "https://yml-chat-app.herokuapp.com/"
+// const SOCKET_IO_SERVER = "http://localhost:3000"
+const SOCKET_IO_SERVER = "https://yml-chat-app.herokuapp.com/"
 
 const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(undefined)
