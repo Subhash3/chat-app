@@ -11,7 +11,7 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import ContactsIcon from '@material-ui/icons/Contacts';// import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 // import { useUserChats } from '../../contexts/UserChatsProvider'
 import { MSG_PENDING, MSG_SENT, MSG_NOT_SENT } from '../NewMsgForm/NewMsgForm'
-import { v4 as uuid } from 'uuid'
+// import { v4 as uuid } from 'uuid'
 import './UserChats.min.css'
 import { useRef } from 'react';
 
@@ -30,8 +30,10 @@ const UserChats = () => {
     // console.log({ chatDB })
 
     const getChatDB = async () => {
+        console.log("***Fetching chat database***")
         let userID = currentUser.id
         let response = await chatAPI.get(`/chats/${userID}`)
+        // console.log("***Got char DB***")
         // console.log(response.data)
         setChatDB(response.data)
     }
@@ -115,39 +117,39 @@ const UserChats = () => {
             //     changeMessageState(id, MSG_PENDING)
             // })
 
-            socket.on('received-message', msbObjectString => {
-                let msgObject = JSON.parse(msbObjectString)
-                console.log("[received-message]: Received message:", msgObject)
+            // socket.on('received-message', msbObjectString => {
+            //     let msgObject = JSON.parse(msbObjectString)
+            //     console.log("[received-message]: Received message:", msgObject)
 
-                // msgObject.id = uuid()
-                getChatDB()
-            })
+            //     // msgObject.id = uuid()
+            //     getChatDB()
+            // })
 
-            socket.on('flush-messages', allMessagesStringified => {
-                console.log("[flush-messages]: Got flushed messages")
-                let allMessages = JSON.parse(allMessagesStringified)
-                addFlushedMessages(allMessages)
-            })
+            // socket.on('flush-messages', allMessagesStringified => {
+            //     console.log("[flush-messages]: Got flushed messages")
+            //     let allMessages = JSON.parse(allMessagesStringified)
+            //     addFlushedMessages(allMessages)
+            // })
         }
 
     }, [socket])
 
-    const addFlushedMessages = (allMessages) => {
-        if (!allMessages)
-            return
+    // const addFlushedMessages = (allMessages) => {
+    //     if (!allMessages)
+    //         return
 
-        let allMesssageObjects = []
+    //     let allMesssageObjects = []
 
-        allMessages.forEach(message => {
-            allMesssageObjects.push(JSON.parse(message))
-        })
+    //     allMessages.forEach(message => {
+    //         allMesssageObjects.push(JSON.parse(message))
+    //     })
 
-        setChatDB([...chatDB, ...allMesssageObjects])
-    }
+    //     setChatDB([...chatDB, ...allMesssageObjects])
+    // }
 
     return (
         <div ref={chatsRef} className="chats">
-            <div ref={toggleSidebarRef} className={`toggle-sidebar`}>
+            <div ref={toggleSidebarRef} className={`toggle-sidebar move-left`}>
                 <ContactsIcon />
             </div>
             {activeConversationID ? (userChats.map(chatObject => {
@@ -162,7 +164,7 @@ const Message = ({ msgObject }) => {
     const [currentUser] = useCurrentUser()
     let isSender = (msgObject.senderID === currentUser.id)
     let msgStatus = msgObject.status
-    console.log(msgStatus, msgObject.msgBody)
+    // console.log(msgStatus, msgObject.msgBody)
 
     return (
         <div className={`msg ${isSender ? "sender" : ""} ${msgStatus}`}>

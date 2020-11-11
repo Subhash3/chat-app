@@ -82,7 +82,7 @@
         height: 30px;
         opacity: 0.8;
         background-color: var(--other-msg-bg);
-        transform: translate(-10px, 80px);
+        transform: translate(-10px, 60px);
         cursor: pointer;
         transition: transform 200ms ease-in-out;
 
@@ -93,7 +93,7 @@
         }
 
         &.move-left{
-            transform: translate(265px, 80px);
+            transform: translate(260px, 60px);
         }
     }
 }

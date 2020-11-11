@@ -25,7 +25,7 @@ const ChatWindow = () => {
 
     return !currentUser ? <Redirect to='/login' /> : (
         <div className="chat-window">
-            <div className={`window-sidebar`}>
+            <div className={`window-sidebar active`}>
                 <LoggedInUserInfo />
                 <div className="search-bar"></div>
                 <UsersList />

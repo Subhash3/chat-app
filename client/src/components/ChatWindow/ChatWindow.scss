@@ -24,7 +24,7 @@
 
         .loggedin-user-info{
             width: 100%;
-            height: 100px;
+            height: 68px;
             background-color: var(--secondary-bg);
         }
     }
@@ -34,7 +34,7 @@
         // background-color: #e3edee;
         align-items: center;
         width: 75%;
-        --other-users-info-height: 80px;
+        --other-users-info-height: 60px;
 
         .other-user-info{
             height: var(--other-users-info-height);
@@ -82,5 +82,11 @@
                 }
             }
         }
+    }
+}
+
+@media screen and (max-width: 416px){
+    .msg{
+        max-width: 200px;
     }
 }

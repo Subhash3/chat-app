@@ -3,6 +3,7 @@ import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useChatDB } from '../../contexts/ChatDBProvider'
 import { useSocket } from '../../contexts/SocketProvider'
+import { chatAPI } from '../../Apis/chatApi'
 import Picker from 'emoji-picker-react';
 import SendIcon from '@material-ui/icons/Send';
 import { v4 as uuid } from 'uuid'
@@ -82,6 +83,41 @@ const NewMsgForm = () => {
             changeMessageState(id, MSG_PENDING)
         })
 
+        socket.on('received-message', msbObjectString => {
+            let msgObject = JSON.parse(msbObjectString)
+            console.log("[received-message]: Received message:", msgObject)
+
+            // msgObject.id = uuid()
+            getChatDB()
+        })
+
+        socket.on('flush-messages', allMessagesStringified => {
+            console.log("[flush-messages]: Got flushed messages")
+            let allMessages = JSON.parse(allMessagesStringified)
+            addFlushedMessages(allMessages)
+        })
+    }
+
+    const addFlushedMessages = (allMessages) => {
+        if (!allMessages)
+            return
+
+        let allMesssageObjects = []
+
+        allMessages.forEach(message => {
+            allMesssageObjects.push(JSON.parse(message))
+        })
+
+        setChatDB([...chatDB, ...allMesssageObjects])
+    }
+
+    const getChatDB = async () => {
+        console.log("***Fetching chat database***")
+        let userID = currentUser.id
+        let response = await chatAPI.get(`/chats/${userID}`)
+        console.log("***Got char DB***")
+        console.log(response.data)
+        setChatDB(response.data)
     }
 
     const handleSubmit = (e) => {
