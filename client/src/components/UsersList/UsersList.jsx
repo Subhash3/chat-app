@@ -5,6 +5,7 @@ import { useActiveConversation } from '../../contexts/ActiveConversationProvider
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useSocket } from '../../contexts/SocketProvider'
 import { chatAPI } from '../../Apis/chatApi'
+import { toggleSidebar } from '../UserChats/UserChats'
 import './UsersList.min.css'
 
 const UsersList = () => {
@@ -54,6 +55,7 @@ const UsersList = () => {
         userID = userID
         // console.log({ userID })
         setActiveConversationID(userID)
+        toggleSidebar()
     }
 
     return (

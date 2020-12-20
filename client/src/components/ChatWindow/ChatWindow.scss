@@ -61,6 +61,7 @@
             z-index: 10;
             box-shadow: 1px 1px 5px var(--other-msg-bg);
             transform: translateX(-110%);
+            width: 100%;
 
             &.active{
                 transform: translateX(0%);
