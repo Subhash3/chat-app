@@ -29,6 +29,13 @@ Webapp is live [here](http://yml-chat-app.herokuapp.com/)
 - [x] Set up socket IO 'msg-sent', 'msg-pending', and 'msg-not-sent' events.
 - [x] Separate icons for msg statuses.
 - [x] Responsiveness.
+- [x] Back Button in mobile view.
+- [x] Add date.
+- [ ] Select a message.
+- [ ] Dropdown on a message.
+- [ ] Delete a message.
+- [ ] Delete a whole convo (functionality of 3 dots).
+- [ ] Identify the type of user, i.e, Learner/Educator/Institute.
 - [ ] Create a group conversation.
 
 ##### Backend
@@ -46,8 +53,12 @@ Webapp is live [here](http://yml-chat-app.herokuapp.com/)
 - [x] Besides flushing messages to a newly logged in user, inform those messages' senders that these messages are now sent.
 - [x] Setup Wait queues for socket io events as well.
 - [x] Update messages' statuses on the database after flushing them.
+- [ ] Delete a message.
+- [ ] Delete a whole convo (functionality of 3 dots).
+- [ ] Forward a message.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
+
   
 ##### Other (Or Common)
 - [x] Differentiate sent, pending and unset message.
