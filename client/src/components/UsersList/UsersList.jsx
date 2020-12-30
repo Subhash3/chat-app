@@ -55,7 +55,7 @@ const UsersList = () => {
         userID = userID
         // console.log({ userID })
         setActiveConversationID(userID)
-        toggleSidebar()
+        toggleSidebar() // Actually, we should execute this statement in the mobile view. 
     }
 
     return (

@@ -8,6 +8,7 @@ const chatsSchema = new Schema({
     receiverID: String,
     msgBody: String,
     time: String,
+    date: String,
     status: String,
 })
 

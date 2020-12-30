@@ -10,7 +10,14 @@ export const WEB_VIEW = "web-view"
 export const MOBILE_VIEW = "mobile-view"
 
 const ViewProvider = ({ children }) => {
-    const [view, setView] = useState(WEB_VIEW)
+    let currentView
+    if (window.innerWidth < 750) {
+        currentView = MOBILE_VIEW
+    } else {
+        currentView = WEB_VIEW
+    }
+
+    const [view, setView] = useState(currentView)
 
     window.addEventListener('resize', () => {
         if (window.innerWidth < 750) {

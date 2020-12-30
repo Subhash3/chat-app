@@ -115,3 +115,11 @@
     place-items: center;
     color: white;
 }
+
+.date-label{
+    font-size: 12px;
+    font-family: monospace;
+    background-color: var(--secondary-bg);
+    padding: 5px 0;
+    margin: 5px 0 10px 0; 
+}

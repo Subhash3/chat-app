@@ -62,7 +62,10 @@ const NewMsgForm = () => {
             msgBody,
             status: MSG_PENDING,
             time: new Date().toLocaleString().split(' ')[1],
+            date: new Date().toLocaleDateString("en-us"),
         }
+
+        console.log("Sending message: ", msgObject)
 
         socket.emit('send-message', JSON.stringify(msgObject))
         setChatDB([...chatDB, msgObject])

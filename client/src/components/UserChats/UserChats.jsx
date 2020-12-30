@@ -32,6 +32,7 @@ const UserChats = () => {
     // const msgIDToStatusMap = {}
     const socket = useSocket()
     const chatsRef = useRef()
+    let prevDate = undefined
     // const toggleSidebarRef = useRef()
 
     console.log("rendering USER_CHATS")
@@ -154,7 +155,16 @@ const UserChats = () => {
                 <ContactsIcon />
             </div> */}
             {activeConversationID ? (userChats.map(chatObject => {
-                return <Message key={chatObject.id} msgObject={chatObject} />
+                let returnElement = (prevDate === undefined || prevDate !== chatObject.date)
+                    ? (
+                        <>
+                            <DateLabel key={chatObject.id + "date-label"} date={chatObject.date} />
+                            <Message key={chatObject.id} msgObject={chatObject} />
+                        </>
+                    )
+                    : (<Message key={chatObject.id} msgObject={chatObject} />)
+                prevDate = chatObject.date
+                return returnElement
             }))
                 : <SelectAChat />}
         </div>
@@ -191,6 +201,12 @@ const SelectAChat = () => {
         <div className="select-chat">
             Please select a conversation
         </div>
+    )
+}
+
+const DateLabel = ({ date }) => {
+    return (
+        <p className="date-label">{date}</p>
     )
 }
 

@@ -23,6 +23,7 @@ const chatAppHandler = (io) => {
     }
 
     const isUserOnline = (userID) => {
+        console.log("isUserOnline")
         return (userID in userIDToSocketMap)
     }
 
