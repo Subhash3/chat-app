@@ -53,6 +53,18 @@ const NewMsgForm = () => {
         })
     }
 
+    const getFormattedDate = (date) => {
+        let year = date.getFullYear();
+
+        let month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+
+        let day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+
+        return day + '/' + month + '/' + year;
+    }
+
     const sendMessage = (msgBody) => {
         setOpenEmojiPicker(false)
         let msgObject = {
@@ -62,7 +74,7 @@ const NewMsgForm = () => {
             msgBody,
             status: MSG_PENDING,
             time: new Date().toLocaleString().split(' ')[1],
-            date: new Date().toLocaleDateString("en-us"),
+            date: getFormattedDate(new Date()),
         }
 
         console.log("Sending message: ", msgObject)

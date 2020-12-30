@@ -204,7 +204,12 @@ const SelectAChat = () => {
     )
 }
 
+const datesDifference = (date1, date2) => {
+    return Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
+}
+
 const DateLabel = ({ date }) => {
+    let dateString = null
     return (
         <p className="date-label">{date}</p>
     )
