@@ -7,6 +7,7 @@ import OtherUserInfo from '../OtherUserInfo/OtherUserInfo';
 import { useSocket } from '../../contexts/SocketProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
+import { useActiveMessageOptionsID } from '../../contexts/ActiveMessageOptionsProvider.jsx'
 // import { useSidebarRef } from '../../contexts/SidebarRefProvider'
 import { Redirect } from 'react-router-dom'
 import './ChatWindow.min.css'
@@ -15,8 +16,19 @@ const ChatWindow = () => {
     const [currentUser] = useCurrentUser()
     const socket = useSocket()
     const [activeConversationID] = useActiveConversation()
+    const [_msgIDWithActiveOptions, setMsgIDWithActiveOptions] = useActiveMessageOptionsID()
 
     // console.log("rendering CHAT_WINDOW")
+
+    useEffect(() => {
+        const chatWindowElement = document.querySelector('.chat-window')
+        if (chatWindowElement) {
+            chatWindowElement.addEventListener('click', () => {
+                console.log("CHAT_WINDOW clicked")
+                setMsgIDWithActiveOptions(null)
+            })
+        }
+    }, [])
 
     useEffect(() => {
         if (socket)

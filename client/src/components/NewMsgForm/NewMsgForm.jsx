@@ -111,6 +111,11 @@ const NewMsgForm = () => {
             let allMessages = JSON.parse(allMessagesStringified)
             addFlushedMessages(allMessages)
         })
+
+        socket.on('deleted-msgs-ack', () => {
+            console.log("[deleted-msgs-ack]:")
+            getChatDB()
+        })
     }
 
     const addFlushedMessages = (allMessages) => {
@@ -130,7 +135,7 @@ const NewMsgForm = () => {
         console.log("***Fetching chat database***")
         let userID = currentUser.id
         let response = await chatAPI.get(`/chats/${userID}`)
-        console.log("***Got char DB***")
+        console.log("***Got chat DB***")
         console.log(response.data)
         setChatDB(response.data)
     }

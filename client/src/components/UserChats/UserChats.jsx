@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
 // import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
@@ -8,12 +9,16 @@ import { chatAPI } from '../../Apis/chatApi'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import CachedIcon from '@material-ui/icons/Cached'
 import CancelIcon from '@material-ui/icons/Cancel'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useActiveMessageOptionsID } from '../../contexts/ActiveMessageOptionsProvider.jsx'
+import SelectionToolBar from '../SelectionToolBar/SelectionToolBar'
+import { useSelectedMessages } from '../../contexts/SelectedMessagesProvider'
 import ContactsIcon from '@material-ui/icons/Contacts';// import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-// import { useUserChats } from '../../contexts/UserChatsProvider'
 import { MSG_PENDING, MSG_SENT, MSG_NOT_SENT } from '../NewMsgForm/NewMsgForm'
+import { useSelectionToolBarStatus } from '../../contexts/SelectionToolBarStatusProvider'
+// import { useUserChats } from '../../contexts/UserChatsProvider'
 // import { v4 as uuid } from 'uuid'
 import './UserChats.min.css'
-import { useRef } from 'react';
 
 // Probably not an efficient way to do this!
 export const toggleSidebar = (e) => {
@@ -29,7 +34,9 @@ const UserChats = () => {
     const [userChats, setUserChats] = useState([])
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
-    // const msgIDToStatusMap = {}
+    const [msgIDWithActiveOptions, setMsgIDWithActiveOptions] = useActiveMessageOptionsID()
+    const [isToolbarActive, _setToolbarActive] = useSelectionToolBarStatus()
+
     const socket = useSocket()
     const chatsRef = useRef()
     let prevDate = undefined
@@ -69,16 +76,6 @@ const UserChats = () => {
         scrollToLatestMsg()
     }, [userChats])
 
-    // useEffect(() => {
-    //     console.log("-----ChatDB changed!-----")
-    //     console.log("ChatDB: ", chatDB)
-    // }, [chatDB])
-
-    // const changeMessageState = (msgID, msgStatus) => {
-    //     console.log("Changing the state of the message with ID: ", msgID)
-    //     msgIDToStatusMap[msgID] = msgStatus
-    // }
-
     const extractConversations = () => {
         console.log("Extracting convos")
         // console.log("Chat DB Length: ", chatDB.length)
@@ -99,70 +96,33 @@ const UserChats = () => {
         extractConversations()
     }, [activeConversationID, chatDB, currentUser.id, socket])
 
-    useEffect(() => {
 
-        // Setup SocketIO events
-        if (socket) {
-            // socket.on('message-sent', (id) => {
-            //     console.log("[message-sent]: Message Has been sent")
-            //     changeMessageState(id, MSG_SENT)
-            //     console.log({ userChats, chatDB })
-            // })
-
-            // socket.on('message-not-sent', (reason, id) => {
-            //     console.log("[message-not-sent]: Message has been not sent. : " + reason)
-            //     changeMessageState(id, MSG_NOT_SENT)
-            // })
-
-            // socket.on('pending', (reason, id) => {
-            //     console.log("[pending]: Message pending... : " + reason)
-            //     changeMessageState(id, MSG_PENDING)
-            // })
-
-            // socket.on('received-message', msbObjectString => {
-            //     let msgObject = JSON.parse(msbObjectString)
-            //     console.log("[received-message]: Received message:", msgObject)
-
-            //     // msgObject.id = uuid()
-            //     getChatDB()
-            // })
-
-            // socket.on('flush-messages', allMessagesStringified => {
-            //     console.log("[flush-messages]: Got flushed messages")
-            //     let allMessages = JSON.parse(allMessagesStringified)
-            //     addFlushedMessages(allMessages)
-            // })
+    console.log({ msgIDWithActiveOptions })
+    const toggleMenu = (msgID) => {
+        console.log("\tInside toggleMenu")
+        console.log("Message Id: ", msgID)
+        console.log("Actoive message options: ", msgIDWithActiveOptions)
+        if (msgID === msgIDWithActiveOptions) {
+            setMsgIDWithActiveOptions(null)
+        } else {
+            setMsgIDWithActiveOptions(msgID)
         }
 
-    }, [socket])
-
-    // const addFlushedMessages = (allMessages) => {
-    //     if (!allMessages)
-    //         return
-
-    //     let allMesssageObjects = []
-
-    //     allMessages.forEach(message => {
-    //         allMesssageObjects.push(JSON.parse(message))
-    //     })
-
-    //     setChatDB([...chatDB, ...allMesssageObjects])
-    // }
+        return
+    }
 
     return (
         <div ref={chatsRef} className="chats">
-            {/* <div ref={toggleSidebarRef} className={`toggle-sidebar move-left`}>
-                <ContactsIcon />
-            </div> */}
+            {isToolbarActive && <SelectionToolBar />}
             {activeConversationID ? (userChats.map(chatObject => {
                 let returnElement = (prevDate === undefined || prevDate !== chatObject.date)
                     ? (
                         <>
                             <DateLabel key={chatObject.id + "date-label"} date={chatObject.date} />
-                            <Message key={chatObject.id} msgObject={chatObject} />
+                            <Message key={chatObject.id} msgObject={chatObject} toggleMenu={() => toggleMenu(chatObject.id)} />
                         </>
                     )
-                    : (<Message key={chatObject.id} msgObject={chatObject} />)
+                    : (<Message key={chatObject.id} msgObject={chatObject} toggleMenu={() => toggleMenu(chatObject.id)} />)
                 prevDate = chatObject.date
                 return returnElement
             }))
@@ -171,18 +131,84 @@ const UserChats = () => {
     );
 }
 
-const Message = ({ msgObject }) => {
+const Message = ({ msgObject, toggleMenu }) => {
     const [currentUser] = useCurrentUser()
+    const [isToolbarActive, setToolbarActive] = useSelectionToolBarStatus()
+    const [msgIDWithActiveOptions, _setMsgIDWithActiveOptions] = useActiveMessageOptionsID()
+    const [selectedMessages, setSelectedMessages] = useSelectedMessages()
+
     let isSender = (msgObject.senderID === currentUser.id)
     let msgStatus = msgObject.status
-    // console.log(msgStatus, msgObject.msgBody)
+
+    console.log("rendering Message component")
+
+    // console.log("selectedMessages: ", selectedMessages)
+
+    const selectMessage = (msgID) => {
+        if (selectedMessages.has(msgID)) {
+            selectedMessages.delete(msgID)
+            setSelectedMessages(selectedMessages)
+        }
+        else {
+            setSelectedMessages(new Set([...selectedMessages, msgID]))
+        }
+    }
 
     return (
-        <div className={`msg ${isSender ? "sender" : ""} ${msgStatus}`}>
-            {/* <div className="from">From: {msgObject.senderID}</div> */}
-            <div className="msg-body">{msgObject.msgBody}</div>
-            <div className="time">{msgObject.time}</div>
-            {isSender && <MsgStatusIcon status={msgStatus} />}
+        <div className={`message-element ${isSender ? "sender" : ""}`}>
+            {isToolbarActive &&
+                <div className="select-box">
+                    <input type="checkbox" onClick={() => selectMessage(msgObject.id)} />
+                </div>
+            }
+            <div className={`msg ${isSender ? "sender" : ""} ${msgStatus}`}>
+                {/* <div className="from">From: {msgObject.senderID}</div> */}
+                <div className="msg-body">{msgObject.msgBody}</div>
+                <div className="time">{msgObject.time}</div>
+                {isSender && <MsgStatusIcon status={msgStatus} />}
+                <span className="msg-options-icon"><ExpandMoreIcon onClick={toggleMenu} /></span>
+                <MessageOptions msgObject={msgObject} msgIDWithActiveOptions={msgIDWithActiveOptions} msgID={msgObject.id} />
+            </div>
+        </div>
+    )
+}
+
+const MessageOptions = ({ msgObject, msgIDWithActiveOptions, msgID }) => {
+    const [isToolbarActive, setToolbarActive] = useSelectionToolBarStatus()
+    const [selectedMessages, setSelectedMessages] = useSelectedMessages()
+
+    console.log("Rendering message options")
+    console.log({ msgIDWithActiveOptions, msgID })
+
+    const forwardMessage = () => {
+        console.log("Forwarding message with ID:", msgID)
+        setToolbarActive(false)
+        setSelectedMessages(new Set())
+    }
+
+    const copyMessage = () => {
+        // console.log("Copying message with ID:", msgID)
+        let clipboardPromise = navigator.clipboard.writeText(msgObject.msgBody)
+        clipboardPromise
+            .then(() => {
+                console.log("Copied message with ID:", msgID)
+            })
+            .catch(() => {
+                console.log("Error copying message with ID:", msgID)
+            })
+    }
+
+    const activateToolBar = () => {
+        console.log("Activating toolbar!")
+        setToolbarActive(!isToolbarActive)
+    }
+
+
+    return (
+        <div className={`msg-options ${(msgIDWithActiveOptions === msgID) ? "active" : ""}`}>
+            <div className="option forward" onClick={forwardMessage}>Forward</div>
+            <div className="option copy" onClick={copyMessage}>Copy</div>
+            <div className="option more" onClick={activateToolBar}>More</div>
         </div>
     )
 }
@@ -204,12 +230,12 @@ const SelectAChat = () => {
     )
 }
 
-const datesDifference = (date1, date2) => {
-    return Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
-}
+// const datesDifference = (date1, date2) => {
+//     return Math.abs((date1 - date2) / (1000 * 60 * 60 * 24))
+// }
 
 const DateLabel = ({ date }) => {
-    let dateString = null
+    // let dateString = null
     return (
         <p className="date-label">{date}</p>
     )

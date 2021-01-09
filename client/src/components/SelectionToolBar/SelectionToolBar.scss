@@ -1,0 +1,38 @@
+.selection-toolbar
+{
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-between;
+    align-items: center;
+    width: 75%;
+    padding: 20px 30px;
+    margin: 10px 0;
+    // top: 0;
+    background-color: var(--secondary-bg);
+    box-shadow: 1px 1px 5px var(--other-msg-bg);
+    font-family: monospace;
+    transform: translateY(-72%) translateX(-10px);
+    z-index: 99;
+    
+    div{
+        cursor: pointer;
+        margin: 0 15px;
+    }
+
+    .cancel{
+        background-color: var(--other-msg-bg);
+        padding: 7px;
+        border-radius: 2px;
+        color: white;
+        margin-left: auto;
+    }
+
+    .delete{
+        color: rgb(204, 59, 59);
+    }
+
+    .forward{
+        transform: rotateY(180deg);
+    }
+}

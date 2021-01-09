@@ -217,6 +217,20 @@ const chatAppHandler = (io) => {
             }
         })
 
+        socket.on("deleted-msgs-ack", (receiverID) => {
+            console.log(`.on(deleted-msg-ack), ${receiverID}`)
+            if (isUserOnline(receiverID)) {
+                console.log(`user: ${receiverID} is online`)
+                let socket = userIDToSocketMap[receiverID]
+                console.log(socket.id)
+
+                console.log(`Emitting "deleted-msg-ack" to ${receiverID}`)
+                socket.emit("deleted-msgs-ack")
+            } else {
+                addSocketEventToWaitQueue(receiverID, ["deleted-msgs-ack", receiverID])
+            }
+        })
+
         socket.on('disconnect', (reason) => {
             console.log("Disconnected", socket.id, reason)
             removeUserTraces(socket.id)

@@ -41,7 +41,7 @@
         color: white;
 
         &.online{
-            .name::after{
+            &::after{
                 background-color: white;
             }
         }
@@ -52,15 +52,14 @@
     }
 
     &.online{
-        .name::after{
+        &::after{
             position: absolute;
             content: '';
             width: 8px;
             height: 8px;
             border-radius: 50%;
             background-color: var(--bg-color);
-            left: calc( 100% + 10px );
-            top: calc( 50% - 4px );
+            right: 10px;
         }
     }
 }

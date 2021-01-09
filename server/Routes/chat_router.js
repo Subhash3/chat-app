@@ -35,6 +35,17 @@ const getChats = async (userID) => {
     return chats
 }
 
+const deleteMessages = (messageIDs) => {
+    let mongoPromise = ChatsModel.deleteMany({
+        'id': {
+            '$in': [...messageIDs]
+        }
+    })
+    // db.chats.deleteMany({id: {$in: ["95863fc1-10ca-4755-98b1-68497736fda8", "c30c3467-370a-4108-a3e6-e00466e22ad0"]}} )
+
+    return mongoPromise
+}
+
 router.get('/', (req, res) => {
     res.send({ "msg": welcomeMessage })
 })
@@ -63,6 +74,35 @@ router.get('/chats/:userID', (req, res) => {
         .catch(err => {
             res.send(mongoError + err)
         })
+})
+
+router.post('/delete/', (req, res) => {
+    let messageIDs = req.body.messageIDs
+    console.log(messageIDs)
+    // let senderID = req.body.senderID
+    let receiverID = req.body.receiverID
+
+    messageIDs.forEach(msgID => {
+        console.log("Deleting message with ID: " + msgID)
+    })
+
+    let mongoPromise = deleteMessages(messageIDs)
+    mongoPromise
+        .then((data) => {
+            console.log(data)
+            res.send({
+                message: `Deleted messages`,
+                status: 1
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({
+                message: `Failed to delete messages`,
+                status: -1
+            })
+        })
+
 })
 
 module.exports = {
