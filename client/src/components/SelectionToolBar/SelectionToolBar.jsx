@@ -37,8 +37,8 @@ const SelectionToolBar = () => {
     const deleteMessage = async () => {
         console.log("Deleting messages with IDs:", selectedMessages)
         // let response = await chatAPI.get(`/delete/${JSON.stringify([...selectedMessages])}`)
-        console.log("****************************************")
-        console.log(`SelectedMessages[0]: ${[...selectedMessages][0]}`)
+        // console.log("****************************************")
+        // console.log(`SelectedMessages[0]: ${[...selectedMessages][0]}`)
         let msgObject = chatDB.filter(msg => msg.id === [...selectedMessages][0])
         console.log(msgObject)
         let response = await chatAPI.post('/delete', {
@@ -55,10 +55,10 @@ const SelectionToolBar = () => {
             let receiverID = msgObject.receiverID
             let senderID = msgObject.senderID
 
-            console.log("****************************************")
-            console.log(msgObject)
+            // console.log("****************************************")
+            // console.log(msgObject)
             // Object.keys(msgObject).forEach(key => console.log(key, msgObject[key]))
-            console.log({ receiverID })
+            // console.log({ receiverID })
             console.log("Deleted messages!")
             console.log(`Emitting "deleted-msgs-ack to ${receiverID} and ${senderID}`)
             socket.emit("deleted-msgs-ack", receiverID)

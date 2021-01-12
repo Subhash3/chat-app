@@ -27,5 +27,33 @@
 
     .settings{
         margin: 0 10px 0 auto;
+        cursor: pointer;
+        font-family: monospace;
+
+        .settings-menu{
+            position: absolute;
+            right: 20px;
+            background: white;
+            box-shadow: 1px 1px 3px var(--other-msg-bg);
+            display: flex;
+            flex-direction: column;
+            border-radius: 7px;
+            transform: scale(0);
+            transform-origin: top right;
+            transition: transform 200ms ease-in-out;
+
+            &.active{
+                transform: scale(1);
+            }
+
+            div{
+                padding: 13px 5px;
+                border-bottom: 1px solid var(--other-msg-bg);
+
+                &:last-child{
+                    border: none;
+                }
+            }
+        }
     }
 }

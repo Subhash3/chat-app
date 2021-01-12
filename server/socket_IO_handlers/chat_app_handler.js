@@ -217,7 +217,7 @@ const chatAppHandler = (io) => {
             }
         })
 
-        socket.on("deleted-msgs-ack", (receiverID) => {
+        socket.on('deleted-msgs-ack', (receiverID) => {
             console.log(`.on(deleted-msg-ack), ${receiverID}`)
             if (isUserOnline(receiverID)) {
                 console.log(`user: ${receiverID} is online`)
@@ -229,6 +229,10 @@ const chatAppHandler = (io) => {
             } else {
                 addSocketEventToWaitQueue(receiverID, ["deleted-msgs-ack", receiverID])
             }
+        })
+
+        socket.on('delete-whole-convo', (id1, id2) => {
+            deleteWholeConvo(id1, id2)
         })
 
         socket.on('disconnect', (reason) => {

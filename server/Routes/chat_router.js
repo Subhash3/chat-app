@@ -46,6 +46,27 @@ const deleteMessages = (messageIDs) => {
     return mongoPromise
 }
 
+
+const deleteWholeConvo = (id1, id2) => {
+    let mongoPromise = ChatsModel.deleteMany({
+        '$or': [
+            {
+                '$and': [
+                    { "senderID": id1 },
+                    { "receiverID": id2 }
+                ]
+            },
+            {
+                '$and': [
+                    { "senderID": id2 },
+                    { "receiverID": id1 }
+                ]
+            }
+        ]
+    })
+    return mongoPromise
+}
+
 router.get('/', (req, res) => {
     res.send({ "msg": welcomeMessage })
 })
@@ -103,6 +124,26 @@ router.post('/delete/', (req, res) => {
             })
         })
 
+})
+
+router.post('/delete-convo', (req, res) => {
+    let { id1, id2 } = req.body.IDs
+    let mongoPromise = deleteWholeConvo(id1, id2)
+    mongoPromise
+        .then((data) => {
+            console.log(data)
+            res.send({
+                message: `Deleted Conversation`,
+                status: 1
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({
+                message: `Failed to delete conversation`,
+                status: -1
+            })
+        })
 })
 
 module.exports = {
