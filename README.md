@@ -31,10 +31,13 @@ Webapp is live [here](http://yml-chat-app.herokuapp.com/)
 - [x] Responsiveness.
 - [x] Back Button in mobile view.
 - [x] Add date.
-- [ ] Select a message.
-- [ ] Dropdown on a message.
-- [ ] Delete a message.
-- [ ] Delete a whole convo (functionality of 3 dots).
+- [x] Select a message.
+- [x] Dropdown on a message.
+- [x] Align checkboxes, online status dot!
+- [x] Delete a message.
+- [x] Delete a whole convo (functionality of 3 dots).
+- [ ] Message notifications.
+- [ ] Forward a message.
 - [ ] Identify the type of user, i.e, Learner/Educator/Institute.
 - [ ] Create a group conversation.
 
@@ -53,8 +56,8 @@ Webapp is live [here](http://yml-chat-app.herokuapp.com/)
 - [x] Besides flushing messages to a newly logged in user, inform those messages' senders that these messages are now sent.
 - [x] Setup Wait queues for socket io events as well.
 - [x] Update messages' statuses on the database after flushing them.
-- [ ] Delete a message.
-- [ ] Delete a whole convo (functionality of 3 dots).
+- [x] Delete a message.
+- [x] Delete a whole convo end-point.
 - [ ] Forward a message.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
