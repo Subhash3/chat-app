@@ -4,6 +4,7 @@ import { useActiveConversation } from '../../contexts/ActiveConversationProvider
 import { useChatDB } from '../../contexts/ChatDBProvider'
 import { useSocket } from '../../contexts/SocketProvider'
 import { chatAPI } from '../../Apis/chatApi'
+import { useNewMessagesMap } from '../../contexts/NewMsgsMapProvider'
 import Picker from 'emoji-picker-react';
 import SendIcon from '@material-ui/icons/Send';
 import { v4 as uuid } from 'uuid'
@@ -17,6 +18,7 @@ const NewMsgForm = () => {
     const [newMsg, setNewMsg] = useState("")
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false)
     const [chatDB, setChatDB] = useChatDB()
+    const [newMsgsMap, setNewMsgMap] = useNewMessagesMap()
     const [currentUser] = useCurrentUser()
     const [activeConversationID] = useActiveConversation()
     const socket = useSocket()
@@ -65,6 +67,26 @@ const NewMsgForm = () => {
         return day + '/' + month + '/' + year;
     }
 
+    const updateNewMsgCount = (senderID) => {
+        console.log("Updating new msg count")
+        // console.log({ senderID, activeConversationID })
+        // if (senderID == activeConversationID) {
+        //     return;
+        // }
+
+        let newCount
+        console.log({ newMsgsMap })
+        if (senderID in newMsgsMap) {
+            newCount = newMsgsMap[senderID] + 1
+        }
+        else {
+            newCount = 1
+        }
+
+        console.log({ newMsgsMap, senderID, newCount })
+        setNewMsgMap({ ...newMsgsMap, [senderID]: newCount })
+    }
+
     const sendMessage = (msgBody) => {
         setOpenEmojiPicker(false)
         let msgObject = {
@@ -102,6 +124,7 @@ const NewMsgForm = () => {
             let msgObject = JSON.parse(msbObjectString)
             console.log("[received-message]: Received message:", msgObject)
 
+            updateNewMsgCount(msgObject.senderID)
             // msgObject.id = uuid()
             getChatDB()
         })

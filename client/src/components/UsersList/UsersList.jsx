@@ -6,6 +6,7 @@ import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useSocket } from '../../contexts/SocketProvider'
 import { chatAPI } from '../../Apis/chatApi'
 import { toggleSidebar } from '../UserChats/UserChats'
+import { useNewMessagesMap } from '../../contexts/NewMsgsMapProvider'
 import './UsersList.min.css'
 
 const UsersList = () => {
@@ -13,6 +14,7 @@ const UsersList = () => {
     const [currentUser] = useCurrentUser()
     const [activeConversationID, setActiveConversationID] = useActiveConversation()
     const [onlineStatus, setOnlineStatus] = useState({})
+    const [newMsgsMap, setNewMsgMap] = useNewMessagesMap()
     const socket = useSocket()
 
     // console.log({ users })
@@ -50,11 +52,13 @@ const UsersList = () => {
     }, [socket])
 
     const handleClick = (e) => {
-        // console.log("Convo has been clicked", e.target)
+        console.log("Convo has been clicked", e.target)
         let userID = e.target.dataset.userId
         userID = userID
-        // console.log({ userID })
+        console.log({ userID })
         setActiveConversationID(userID)
+        console.log({ activeConversationID })
+        setNewMsgMap({ ...newMsgsMap, [userID]: 0 })
         toggleSidebar() // Actually, we should execute this statement in the mobile view. 
     }
 
@@ -71,6 +75,7 @@ const UsersList = () => {
                                 handleClick={handleClick}
                                 active={user.id === activeConversationID}
                                 online={onlineStatus[user.id]}
+                                newMsgCount={(newMsgsMap[user.id] && newMsgsMap[user.id] != 0) ? newMsgsMap[user.id] : null}
                             />
                         })
                     )

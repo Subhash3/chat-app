@@ -36,7 +36,7 @@ Webapp is live [here](http://yml-chat-app.herokuapp.com/)
 - [x] Align checkboxes, online status dot!
 - [x] Delete a message.
 - [x] Delete a whole convo (functionality of 3 dots).
-- [ ] Message notifications.
+- [x] Message notifications.
 - [ ] Forward a message.
 - [ ] Identify the type of user, i.e, Learner/Educator/Institute.
 - [ ] Create a group conversation.
@@ -58,6 +58,7 @@ Webapp is live [here](http://yml-chat-app.herokuapp.com/)
 - [x] Update messages' statuses on the database after flushing them.
 - [x] Delete a message.
 - [x] Delete a whole convo end-point.
+- [ ] Message notifications.
 - [ ] Forward a message.
 - [ ] Create a group functionality.
 - [ ] Add users to group.
