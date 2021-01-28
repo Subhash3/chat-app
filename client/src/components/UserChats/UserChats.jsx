@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
-// import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useCurrentUser } from '../../contexts/CurrentUserProvider'
 import { useActiveConversation } from '../../contexts/ActiveConversationProvider'
 import { useChatDB } from '../../contexts/ChatDBProvider'
@@ -16,8 +15,7 @@ import { useSelectedMessages } from '../../contexts/SelectedMessagesProvider'
 import ContactsIcon from '@material-ui/icons/Contacts';// import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import { MSG_PENDING, MSG_SENT, MSG_NOT_SENT } from '../NewMsgForm/NewMsgForm'
 import { useSelectionToolBarStatus } from '../../contexts/SelectionToolBarStatusProvider'
-// import { useUserChats } from '../../contexts/UserChatsProvider'
-// import { v4 as uuid } from 'uuid'
+
 import './UserChats.min.css'
 
 // Probably not an efficient way to do this!
